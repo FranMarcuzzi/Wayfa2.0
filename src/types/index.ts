@@ -21,6 +21,7 @@ export type Trip = {
   status: 'planning' | 'active' | 'completed' | 'cancelled';
   created_at: string;
   updated_at: string;
+  cover_image?: string | null;
   participants?: TripParticipant[];
   owner?: User;
 };
@@ -145,4 +146,19 @@ export type Balance = {
   owes: number;
   owed: number;
   net: number;
+};
+
+// Nueva tabla de recuerdos/memorias
+export type Memory = {
+  id: string;
+  trip_id: string;
+  user_id: string;
+  title: string | null;
+  description: string | null;
+  image_url: string;
+  location: string | null;
+  taken_at: string;
+  created_at: string;
+  updated_at: string;
+  user?: User;
 };

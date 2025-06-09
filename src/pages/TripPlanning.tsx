@@ -33,7 +33,8 @@ import {
   CheckCircle,
   PlayCircle,
   PauseCircle,
-  XCircle
+  XCircle,
+  Image
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
@@ -43,6 +44,7 @@ import { useTripParticipants } from '../hooks/useTripParticipants';
 import ItineraryTab from '../components/TripPlanning/ItineraryTab';
 import ExpensesTab from '../components/TripPlanning/ExpensesTab';
 import PollsTab from '../components/TripPlanning/PollsTab';
+import MemoriesTab from '../components/TripPlanning/MemoriesTab';
 import { Trip } from '../types';
 import { format, differenceInDays } from 'date-fns';
 
@@ -275,13 +277,23 @@ const TripPlanning: React.FC = () => {
     return <Navigate to="/trips" replace />;
   }
 
-  const tabs = [
+  // Determinar qué tabs mostrar basado en el estado del viaje
+  const baseTabs = [
     { id: 'overview', label: 'Overview', icon: MapPin },
     { id: 'itinerary', label: 'Itinerary', icon: Calendar },
     { id: 'expenses', label: 'Expenses', icon: DollarSign },
     { id: 'polls', label: 'Polls', icon: BarChart3 },
-    { id: 'participants', label: 'People', icon: Users }
   ];
+
+  // Agregar tab de Memories solo para viajes Active y Completed
+  const tabs = trip.status === 'active' || trip.status === 'completed' 
+    ? [...baseTabs, { id: 'memories', label: 'Memories', icon: Image }]
+    : baseTabs;
+
+  // Agregar tab de People al final (con permisos)
+  if (!(userParticipant?.role === 'participant')) {
+    tabs.push({ id: 'participants', label: 'People', icon: Users });
+  }
 
   const quickActions = [
     { icon: Plane, label: 'Flights', color: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400', filter: 'transport' },
@@ -455,19 +467,15 @@ const TripPlanning: React.FC = () => {
       {/* Navigation Tabs */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8">
+          <div className="flex space-x-8 overflow-x-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon;
-              // Ocultar tab de people para participants
-              if (tab.id === 'participants' && userParticipant?.role === 'participant') {
-                return null;
-              }
               
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center space-x-2 py-4 border-b-2 transition-colors ${
+                  className={`flex items-center space-x-2 py-4 border-b-2 transition-colors whitespace-nowrap ${
                     activeTab === tab.id
                       ? 'border-primary text-primary dark:text-red-400'
                       : 'border-transparent text-text-secondary dark:text-gray-400 hover:text-text-primary dark:hover:text-white'
@@ -711,6 +719,11 @@ const TripPlanning: React.FC = () => {
         {/* Polls Tab */}
         {activeTab === 'polls' && tripId && (
           <PollsTab tripId={tripId} isOwner={!!isOwner} canEdit={!!canEdit} />
+        )}
+
+        {/* Memories Tab - NUEVO */}
+        {activeTab === 'memories' && tripId && (
+          <MemoriesTab tripId={tripId} canEdit={!!canEdit} />
         )}
 
         {/* Participants Tab */}
