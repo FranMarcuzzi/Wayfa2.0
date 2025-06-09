@@ -1,4 +1,4 @@
-import logo from "src/assets/ChatGPT Image 9 jun 2025, 18_18_32.png";
+import logo from "../../assets/logo.png";
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
