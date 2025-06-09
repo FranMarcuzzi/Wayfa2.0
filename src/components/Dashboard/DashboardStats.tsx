@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Calendar, MapPin, Users, DollarSign } from 'lucide-react';
 
 interface StatsProps {
@@ -14,30 +15,32 @@ const DashboardStats: React.FC<StatsProps> = ({
   totalParticipants,
   totalExpenses,
 }) => {
+  const { t } = useTranslation();
+
   const stats = [
     {
-      title: 'Total Trips',
+      title: t('dashboard.stats.totalTrips'),
       value: totalTrips,
       icon: MapPin,
       color: 'text-blue-600 dark:text-blue-400',
       bgColor: 'bg-blue-50 dark:bg-blue-900/20',
     },
     {
-      title: 'Active Trips',
+      title: t('dashboard.stats.activeTrips'),
       value: activeTrips,
       icon: Calendar,
       color: 'text-primary dark:text-red-400',
       bgColor: 'bg-red-50 dark:bg-red-900/20',
     },
     {
-      title: 'Trip Members',
+      title: t('dashboard.stats.tripMembers'),
       value: totalParticipants,
       icon: Users,
       color: 'text-green-600 dark:text-green-400',
       bgColor: 'bg-green-50 dark:bg-green-900/20',
     },
     {
-      title: 'Total Expenses',
+      title: t('dashboard.stats.totalExpenses'),
       value: `$${totalExpenses.toLocaleString()}`,
       icon: DollarSign,
       color: 'text-yellow-600 dark:text-yellow-400',

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Plus, TrendingUp } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useTrips, useTripStats } from '../hooks/useTrips';
@@ -8,6 +9,7 @@ import RecentActivity from '../components/Dashboard/RecentActivity';
 import TripCard from '../components/Trips/TripCard';
 
 const Dashboard: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { trips, isLoading: tripsLoading, error: tripsError } = useTrips();
   const { data: stats, isLoading: statsLoading, error: statsError } = useTripStats();
@@ -69,16 +71,18 @@ const Dashboard: React.FC = () => {
     );
   }
 
+  const userName = user?.full_name || user?.email?.split('@')[0] || 'Traveler';
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-text-primary dark:text-white">
-            Welcome back, {user?.full_name || user?.email?.split('@')[0] || 'Traveler'}!
+            {t('dashboard.welcomeBack', { name: userName })}
           </h1>
           <p className="text-text-secondary dark:text-gray-400 mt-2">
-            Here's what's happening with your trips
+            {t('dashboard.subtitle')}
           </p>
         </div>
         
@@ -87,7 +91,7 @@ const Dashboard: React.FC = () => {
           className="bg-primary hover:bg-red-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center space-x-2"
         >
           <Plus className="h-5 w-5" />
-          <span>New Trip</span>
+          <span>{t('dashboard.newTrip')}</span>
         </Link>
       </div>
 
@@ -104,12 +108,12 @@ const Dashboard: React.FC = () => {
         {/* Recent Trips */}
         <div className="lg:col-span-2">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-text-primary dark:text-white">Recent Trips</h2>
+            <h2 className="text-xl font-semibold text-text-primary dark:text-white">{t('dashboard.recentTrips')}</h2>
             <Link
               to="/trips"
               className="text-primary hover:text-red-600 dark:hover:text-red-400 font-medium transition-colors flex items-center space-x-1"
             >
-              <span>View All</span>
+              <span>{t('dashboard.viewAll')}</span>
               <TrendingUp className="h-4 w-4" />
             </Link>
           </div>
@@ -118,15 +122,15 @@ const Dashboard: React.FC = () => {
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-apple dark:shadow-gray-900/20 p-8 text-center">
               <div className="text-text-secondary dark:text-gray-400 mb-4">
                 <Plus className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p className="text-lg font-medium">No trips yet</p>
-                <p className="text-sm">Create your first trip to get started</p>
+                <p className="text-lg font-medium">{t('dashboard.noTripsYet')}</p>
+                <p className="text-sm">{t('dashboard.noTripsSubtitle')}</p>
               </div>
               <Link
                 to="/trips/new"
                 className="inline-flex items-center space-x-2 bg-primary hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
               >
                 <Plus className="h-4 w-4" />
-                <span>Create Trip</span>
+                <span>{t('dashboard.createTrip')}</span>
               </Link>
             </div>
           ) : (

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/useAuth';
 import { Eye, EyeOff, Mail, Lock, MapPin } from 'lucide-react';
 
 const LoginForm: React.FC = () => {
+  const { t } = useTranslation();
   const { signIn } = useAuth();
   const navigate = useNavigate();
   
@@ -56,9 +58,9 @@ const LoginForm: React.FC = () => {
             <MapPin className="h-10 w-10 text-primary" />
             <span className="text-2xl font-bold text-text-primary dark:text-white">TripPlanner</span>
           </div>
-          <h2 className="text-3xl font-bold text-text-primary dark:text-white">Welcome Back</h2>
+          <h2 className="text-3xl font-bold text-text-primary dark:text-white">{t('auth.welcomeBack')}</h2>
           <p className="mt-2 text-text-secondary dark:text-gray-400">
-            Sign in to your account to continue planning amazing trips
+            {t('auth.signInSubtitle')}
           </p>
         </div>
 
@@ -74,7 +76,7 @@ const LoginForm: React.FC = () => {
             <div className="space-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-                  Email Address
+                  {t('auth.email')}
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-text-secondary dark:text-gray-400" />
@@ -93,7 +95,7 @@ const LoginForm: React.FC = () => {
 
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-                  Password
+                  {t('auth.password')}
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-text-secondary dark:text-gray-400" />
@@ -127,7 +129,7 @@ const LoginForm: React.FC = () => {
                   className="h-4 w-4 text-primary focus:ring-primary border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700"
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-text-secondary dark:text-gray-400">
-                  Remember me
+                  {t('auth.rememberMe')}
                 </label>
               </div>
 
@@ -135,7 +137,7 @@ const LoginForm: React.FC = () => {
                 to="/forgot-password"
                 className="text-sm text-primary hover:text-red-600 dark:hover:text-red-400 font-medium transition-colors"
               >
-                Forgot password?
+                {t('auth.forgotPassword')}
               </Link>
             </div>
 
@@ -144,14 +146,14 @@ const LoginForm: React.FC = () => {
               disabled={loading}
               className="w-full bg-primary hover:bg-red-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Signing In...' : 'Sign In'}
+              {loading ? t('auth.signingIn') : t('auth.signIn')}
             </button>
 
             <div className="text-center">
               <p className="text-text-secondary dark:text-gray-400">
-                Don't have an account?{' '}
+                {t('auth.dontHaveAccount')}{' '}
                 <Link to="/signup" className="text-primary hover:text-red-600 dark:hover:text-red-400 font-medium transition-colors">
-                  Sign up
+                  {t('auth.signUpForFree')}
                 </Link>
               </p>
             </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { formatDistanceToNow } from 'date-fns';
 import { 
   Calendar, 
@@ -22,6 +23,8 @@ interface RecentActivityProps {
 }
 
 const RecentActivity: React.FC<RecentActivityProps> = ({ activities }) => {
+  const { t } = useTranslation();
+
   const getActivityIcon = (type: Activity['type']) => {
     switch (type) {
       case 'trip_created':
@@ -55,10 +58,10 @@ const RecentActivity: React.FC<RecentActivityProps> = ({ activities }) => {
   if (activities.length === 0) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-apple dark:shadow-gray-900/20 p-6">
-        <h3 className="text-lg font-semibold text-text-primary dark:text-white mb-4">Recent Activity</h3>
+        <h3 className="text-lg font-semibold text-text-primary dark:text-white mb-4">{t('dashboard.recentActivity')}</h3>
         <div className="text-center py-8">
           <Clock className="h-12 w-12 text-text-secondary dark:text-gray-400 mx-auto mb-4" />
-          <p className="text-text-secondary dark:text-gray-400">No recent activity</p>
+          <p className="text-text-secondary dark:text-gray-400">{t('dashboard.noRecentActivity')}</p>
         </div>
       </div>
     );
@@ -66,7 +69,7 @@ const RecentActivity: React.FC<RecentActivityProps> = ({ activities }) => {
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-apple dark:shadow-gray-900/20 p-6">
-      <h3 className="text-lg font-semibold text-text-primary dark:text-white mb-6">Recent Activity</h3>
+      <h3 className="text-lg font-semibold text-text-primary dark:text-white mb-6">{t('dashboard.recentActivity')}</h3>
       <div className="space-y-4">
         {activities.map((activity) => {
           const Icon = getActivityIcon(activity.type);
