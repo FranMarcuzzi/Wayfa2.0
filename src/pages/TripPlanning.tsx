@@ -34,7 +34,8 @@ import {
   PlayCircle,
   PauseCircle,
   XCircle,
-  Image
+  Image,
+  MessageCircle
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
@@ -45,6 +46,7 @@ import ItineraryTab from '../components/TripPlanning/ItineraryTab';
 import ExpensesTab from '../components/TripPlanning/ExpensesTab';
 import PollsTab from '../components/TripPlanning/PollsTab';
 import MemoriesTab from '../components/TripPlanning/MemoriesTab';
+import ChatTab from '../components/TripPlanning/ChatTab';
 import { Trip } from '../types';
 import { format, differenceInDays } from 'date-fns';
 
@@ -283,6 +285,7 @@ const TripPlanning: React.FC = () => {
     { id: 'itinerary', label: 'Itinerary', icon: Calendar },
     { id: 'expenses', label: 'Expenses', icon: DollarSign },
     { id: 'polls', label: 'Polls', icon: BarChart3 },
+    { id: 'chat', label: 'Chat', icon: MessageCircle }, // NUEVO TAB DE CHAT
   ];
 
   // Agregar tab de Memories solo para viajes Active y Completed
@@ -721,7 +724,12 @@ const TripPlanning: React.FC = () => {
           <PollsTab tripId={tripId} isOwner={!!isOwner} canEdit={!!canEdit} />
         )}
 
-        {/* Memories Tab - NUEVO */}
+        {/* Chat Tab - NUEVO */}
+        {activeTab === 'chat' && tripId && (
+          <ChatTab tripId={tripId} canEdit={!!canEdit} />
+        )}
+
+        {/* Memories Tab */}
         {activeTab === 'memories' && tripId && (
           <MemoriesTab tripId={tripId} canEdit={!!canEdit} />
         )}

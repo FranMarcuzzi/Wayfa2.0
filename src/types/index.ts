@@ -162,3 +162,18 @@ export type Memory = {
   updated_at: string;
   user?: User;
 };
+
+// NUEVO: Sistema de Chat
+export type Message = {
+  id: string;
+  trip_id: string;
+  user_id: string;
+  content: string;
+  message_type: 'text' | 'image' | 'system';
+  reply_to: string | null;
+  edited_at: string | null;
+  created_at: string;
+  updated_at: string;
+  user?: User;
+  reply_message?: Message;
+};
