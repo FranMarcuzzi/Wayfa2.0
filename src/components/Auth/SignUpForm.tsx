@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/useAuth';
 import { Eye, EyeOff, Mail, User, Lock } from 'lucide-react';
 
 const SignUpForm: React.FC = () => {
+  const { t } = useTranslation();
   const { signUp } = useAuth();
   const navigate = useNavigate();
   
@@ -28,12 +30,12 @@ const SignUpForm: React.FC = () => {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('auth.passwordsDoNotMatch'));
       return;
     }
 
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError(t('auth.passwordTooShort'));
       return;
     }
 
@@ -53,7 +55,7 @@ const SignUpForm: React.FC = () => {
         navigate('/dashboard');
       }
     } catch (err) {
-      setError('An unexpected error occurred');
+      setError(t('errors.generic'));
     } finally {
       setLoading(false);
     }
@@ -63,9 +65,9 @@ const SignUpForm: React.FC = () => {
     <div className="min-h-screen bg-background dark:bg-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 transition-colors">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-text-primary dark:text-white">Create Account</h2>
+          <h2 className="text-3xl font-bold text-text-primary dark:text-white">{t('auth.createAccount')}</h2>
           <p className="mt-2 text-text-secondary dark:text-gray-400">
-            Join us to start planning amazing trips
+            {t('auth.signUpSubtitle')}
           </p>
         </div>
 
@@ -80,7 +82,7 @@ const SignUpForm: React.FC = () => {
             <div className="space-y-4">
               <div>
                 <label htmlFor="fullName" className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-                  Full Name
+                  {t('auth.fullName')}
                 </label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-text-secondary dark:text-gray-400" />
@@ -92,14 +94,14 @@ const SignUpForm: React.FC = () => {
                     value={formData.fullName}
                     onChange={handleChange}
                     className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-text-primary dark:text-white"
-                    placeholder="Enter your full name"
+                    placeholder={t('auth.fullNamePlaceholder')}
                   />
                 </div>
               </div>
 
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-                  Email Address
+                  {t('auth.email')}
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-text-secondary dark:text-gray-400" />
@@ -111,14 +113,14 @@ const SignUpForm: React.FC = () => {
                     value={formData.email}
                     onChange={handleChange}
                     className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-text-primary dark:text-white"
-                    placeholder="Enter your email"
+                    placeholder={t('auth.emailPlaceholder')}
                   />
                 </div>
               </div>
 
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-                  Password
+                  {t('auth.password')}
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-text-secondary dark:text-gray-400" />
@@ -130,7 +132,7 @@ const SignUpForm: React.FC = () => {
                     value={formData.password}
                     onChange={handleChange}
                     className="w-full pl-10 pr-12 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-text-primary dark:text-white"
-                    placeholder="Create a password"
+                    placeholder={t('auth.passwordPlaceholder')}
                   />
                   <button
                     type="button"
@@ -144,7 +146,7 @@ const SignUpForm: React.FC = () => {
 
               <div>
                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-                  Confirm Password
+                  {t('auth.confirmPassword')}
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-text-secondary dark:text-gray-400" />
@@ -156,7 +158,7 @@ const SignUpForm: React.FC = () => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     className="w-full pl-10 pr-12 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-text-primary dark:text-white"
-                    placeholder="Confirm your password"
+                    placeholder={t('auth.confirmPasswordPlaceholder')}
                   />
                   <button
                     type="button"
@@ -174,14 +176,14 @@ const SignUpForm: React.FC = () => {
               disabled={loading}
               className="w-full bg-primary hover:bg-red-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Creating Account...' : 'Create Account'}
+              {loading ? t('auth.creatingAccount') : t('auth.createAccount')}
             </button>
 
             <div className="text-center">
               <p className="text-text-secondary dark:text-gray-400">
-                Already have an account?{' '}
+                {t('auth.alreadyHaveAccount')}{' '}
                 <Link to="/login" className="text-primary hover:text-red-600 dark:hover:text-red-400 font-medium transition-colors">
-                  Sign in
+                  {t('auth.signIn')}
                 </Link>
               </p>
             </div>

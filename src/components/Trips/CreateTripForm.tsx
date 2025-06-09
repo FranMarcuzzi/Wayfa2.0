@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Calendar, MapPin, DollarSign, FileText, X } from 'lucide-react';
 import { useTrips } from '../../hooks/useTrips';
@@ -20,6 +21,7 @@ interface CreateTripFormProps {
 }
 
 const CreateTripForm: React.FC<CreateTripFormProps> = ({ onClose }) => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { createTrip, isCreating } = useTrips();
   const navigate = useNavigate();
@@ -42,7 +44,7 @@ const CreateTripForm: React.FC<CreateTripFormProps> = ({ onClose }) => {
 
   const onSubmit = async (data: TripFormData) => {
     if (!user) {
-      setError('You must be logged in to create a trip');
+      setError(t('auth.loginRequired'));
       return;
     }
 
@@ -72,25 +74,24 @@ const CreateTripForm: React.FC<CreateTripFormProps> = ({ onClose }) => {
           if (onClose) {
             onClose();
           } else {
-            // Navigate to the trips list to see the new trip
             navigate('/trips');
           }
         },
         onError: (error: any) => {
           console.error('❌ Error creating trip:', error);
-          setError(error?.message || 'Failed to create trip. Please try again.');
+          setError(error?.message || t('errors.generic'));
         },
       });
     } catch (err) {
       console.error('❌ Error creating trip:', err);
-      setError('Failed to create trip. Please try again.');
+      setError(t('errors.generic'));
     }
   };
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-apple dark:shadow-gray-900/20 p-6 max-w-2xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-text-primary dark:text-white">Create New Trip</h2>
+        <h2 className="text-2xl font-bold text-text-primary dark:text-white">{t('trips.createNewTrip')}</h2>
         {onClose && (
           <button
             onClick={onClose}
@@ -111,15 +112,15 @@ const CreateTripForm: React.FC<CreateTripFormProps> = ({ onClose }) => {
         {/* Title */}
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-            Trip Title *
+            {t('trips.form.title')} *
           </label>
           <div className="relative">
             <FileText className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-text-secondary dark:text-gray-400" />
             <input
-              {...register('title', { required: 'Trip title is required' })}
+              {...register('title', { required: t('trips.form.titleRequired') })}
               type="text"
               className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-text-primary dark:text-white"
-              placeholder="Enter trip title"
+              placeholder={t('trips.form.titlePlaceholder')}
             />
           </div>
           {errors.title && (
@@ -130,28 +131,28 @@ const CreateTripForm: React.FC<CreateTripFormProps> = ({ onClose }) => {
         {/* Description */}
         <div>
           <label htmlFor="description" className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-            Description
+            {t('trips.form.description')}
           </label>
           <textarea
             {...register('description')}
             rows={3}
             className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-text-primary dark:text-white"
-            placeholder="Describe your trip..."
+            placeholder={t('trips.form.descriptionPlaceholder')}
           />
         </div>
 
         {/* Destination */}
         <div>
           <label htmlFor="destination" className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-            Destination *
+            {t('trips.form.destination')} *
           </label>
           <div className="relative">
             <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-text-secondary dark:text-gray-400" />
             <input
-              {...register('destination', { required: 'Destination is required' })}
+              {...register('destination', { required: t('trips.form.destinationRequired') })}
               type="text"
               className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-text-primary dark:text-white"
-              placeholder="Where are you going?"
+              placeholder={t('trips.form.destinationPlaceholder')}
             />
           </div>
           {errors.destination && (
@@ -163,12 +164,12 @@ const CreateTripForm: React.FC<CreateTripFormProps> = ({ onClose }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="start_date" className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-              Start Date *
+              {t('trips.form.startDate')} *
             </label>
             <div className="relative">
               <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-text-secondary dark:text-gray-400" />
               <input
-                {...register('start_date', { required: 'Start date is required' })}
+                {...register('start_date', { required: t('trips.form.startDateRequired') })}
                 type="date"
                 className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-text-primary dark:text-white"
               />
@@ -180,16 +181,16 @@ const CreateTripForm: React.FC<CreateTripFormProps> = ({ onClose }) => {
 
           <div>
             <label htmlFor="end_date" className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-              End Date *
+              {t('trips.form.endDate')} *
             </label>
             <div className="relative">
               <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-text-secondary dark:text-gray-400" />
               <input
                 {...register('end_date', { 
-                  required: 'End date is required',
+                  required: t('trips.form.endDateRequired'),
                   validate: (value) => {
                     if (startDate && value < startDate) {
-                      return 'End date must be after start date';
+                      return t('trips.form.endDateValidation');
                     }
                     return true;
                   }
@@ -209,14 +210,14 @@ const CreateTripForm: React.FC<CreateTripFormProps> = ({ onClose }) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="md:col-span-2">
             <label htmlFor="budget" className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-              Budget (Optional)
+              {t('trips.form.budget')}
             </label>
             <div className="relative">
               <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-text-secondary dark:text-gray-400" />
               <input
                 {...register('budget', { 
                   valueAsNumber: true,
-                  min: { value: 0, message: 'Budget must be positive' }
+                  min: { value: 0, message: t('trips.form.budgetValidation') }
                 })}
                 type="number"
                 step="0.01"
@@ -231,7 +232,7 @@ const CreateTripForm: React.FC<CreateTripFormProps> = ({ onClose }) => {
 
           <div>
             <label htmlFor="currency" className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-              Currency
+              {t('trips.form.currency')}
             </label>
             <select
               {...register('currency')}
@@ -255,7 +256,7 @@ const CreateTripForm: React.FC<CreateTripFormProps> = ({ onClose }) => {
               onClick={onClose}
               className="px-6 py-3 border border-gray-200 dark:border-gray-600 text-text-primary dark:text-white rounded-lg hover:bg-secondary dark:hover:bg-gray-700 transition-colors duration-200"
             >
-              Cancel
+              {t('common.cancel')}
             </button>
           )}
           <button
@@ -266,7 +267,7 @@ const CreateTripForm: React.FC<CreateTripFormProps> = ({ onClose }) => {
             {isCreating && (
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
             )}
-            <span>{isCreating ? 'Creating...' : 'Create Trip'}</span>
+            <span>{isCreating ? t('trips.form.creating') : t('trips.form.createTrip')}</span>
           </button>
         </div>
       </form>

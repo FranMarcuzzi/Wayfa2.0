@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { formatDistanceToNow, format } from 'date-fns';
 import { 
   Calendar, 
@@ -20,6 +21,7 @@ interface TripCardProps {
 }
 
 const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isNavigating, setIsNavigating] = useState(false);
@@ -47,25 +49,19 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
     ? formatDistanceToNow(new Date(trip.start_date), { addSuffix: true })
     : format(new Date(trip.start_date), 'MMM dd, yyyy');
 
-  // Función mejorada para manejar la navegación
   const handlePlanTripClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    if (isNavigating) return; // Prevenir clicks múltiples
+    if (isNavigating) return;
     
     try {
       setIsNavigating(true);
-      
-      // Usar navigate de forma más robusta
       navigate(`/trips/${trip.id}/plan`);
-      
     } catch (error) {
       console.error('❌ Navigation error:', error);
-      // Fallback: intentar con window.location
       window.location.href = `/trips/${trip.id}/plan`;
     } finally {
-      // Reset después de un delay
       setTimeout(() => setIsNavigating(false), 1000);
     }
   };
@@ -100,7 +96,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
           
           <div className="flex items-center space-x-2">
             <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(trip.status)}`}>
-              {trip.status.charAt(0).toUpperCase() + trip.status.slice(1)}
+              {t(`trips.status.${trip.status}`)}
             </span>
             
             {/* Only show delete menu if user is owner and callback is provided */}
@@ -119,7 +115,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                     className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                   >
                     <Trash2 className="h-3 w-3" />
-                    <span>Delete</span>
+                    <span>{t('common.delete')}</span>
                   </button>
                 </div>
               </div>
@@ -154,9 +150,8 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
           </div>
         </div>
 
-        {/* Botones mejorados */}
+        {/* Buttons */}
         <div className="flex space-x-2">
-          {/* Botón principal Plan Trip - MEJORADO */}
           <button
             onClick={handlePlanTripClick}
             disabled={isNavigating}
@@ -165,21 +160,20 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
             {isNavigating ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                <span>Loading...</span>
+                <span>{t('common.loading')}</span>
               </>
             ) : (
               <>
                 <Settings className="h-4 w-4" />
-                <span>Plan Trip</span>
+                <span>{t('trips.planTrip')}</span>
               </>
             )}
           </button>
           
-          {/* Botón secundario View */}
           <button
             onClick={handleViewClick}
             className="bg-secondary dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-text-primary dark:text-white py-2 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center"
-            title="View trip details"
+            title={t('trips.viewTrip')}
           >
             <Eye className="h-4 w-4" />
           </button>

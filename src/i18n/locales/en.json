@@ -22,7 +22,8 @@
     "yes": "Yes",
     "no": "No",
     "or": "or",
-    "and": "and"
+    "and": "and",
+    "error": "Error"
   },
   "navigation": {
     "dashboard": "Dashboard",
@@ -56,8 +57,25 @@
     "sendingResetLink": "Sending Reset Link...",
     "checkYourEmail": "Check Your Email",
     "resetLinkSent": "We've sent a password reset link to your email",
+    "resetLinkSentTo": "We've sent a password reset link to {{email}}. Click the link in the email to reset your password.",
     "forgotPasswordTitle": "Forgot Password?",
-    "forgotPasswordSubtitle": "No worries! Enter your email and we'll send you a reset link"
+    "forgotPasswordSubtitle": "No worries! Enter your email and we'll send you a reset link",
+    "emailPlaceholder": "Enter your email address",
+    "passwordPlaceholder": "Enter your password",
+    "fullNamePlaceholder": "Enter your full name",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "emailRequired": "Please enter your email address",
+    "resetFailed": "Failed to send reset email",
+    "didntReceiveEmail": "Didn't receive the email? Check your spam folder or try again.",
+    "tryAgain": "Try Again",
+    "needHelp": "Need Help?",
+    "helpTip1": "• Make sure to check your spam/junk folder",
+    "helpTip2": "• The reset link will expire in 24 hours",
+    "helpTip3": "• If you continue having issues, contact support",
+    "resetEmailNote": "We'll send a password reset link to this email address",
+    "loginRequired": "You must be logged in to create a trip"
   },
   "dashboard": {
     "welcomeBack": "Welcome back, {{name}}!",
@@ -97,6 +115,7 @@
     "deleteFailed": "Delete Failed",
     "refreshed": "Refreshed",
     "tripListUpdated": "Trip list has been updated",
+    "deletingTrip": "Deleting trip...",
     "status": {
       "planning": "Planning",
       "active": "Active",
@@ -106,6 +125,7 @@
     "form": {
       "title": "Trip Title",
       "titleRequired": "Trip title is required",
+      "titlePlaceholder": "Enter trip title",
       "description": "Description",
       "descriptionPlaceholder": "Describe your trip...",
       "destination": "Destination",
@@ -350,7 +370,7 @@
       "en": "English",
       "es": "Español",
       "enDescription": "English language interface",
-      "esDescription": "Interfaz en idioma español"
+      "esDescription": "Spanish language interface"
     }
   },
   "notifications": {

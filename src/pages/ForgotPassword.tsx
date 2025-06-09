@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/useAuth';
 import { ArrowLeft, Mail, CheckCircle, AlertCircle, MapPin } from 'lucide-react';
 
 const ForgotPassword: React.FC = () => {
+  const { t } = useTranslation();
   const { resetPassword } = useAuth();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -14,7 +16,7 @@ const ForgotPassword: React.FC = () => {
     e.preventDefault();
     
     if (!email) {
-      setError('Please enter your email address');
+      setError(t('auth.emailRequired'));
       return;
     }
 
@@ -25,12 +27,12 @@ const ForgotPassword: React.FC = () => {
       const { error: resetError } = await resetPassword(email);
 
       if (resetError) {
-        setError(resetError.message || 'Failed to send reset email');
+        setError(resetError.message || t('auth.resetFailed'));
       } else {
         setSuccess(true);
       }
     } catch (err) {
-      setError('An unexpected error occurred');
+      setError(t('errors.generic'));
     } finally {
       setLoading(false);
     }
@@ -54,15 +56,14 @@ const ForgotPassword: React.FC = () => {
               <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
             </div>
             
-            <h2 className="text-2xl font-bold text-text-primary dark:text-white mb-4">Check Your Email</h2>
+            <h2 className="text-2xl font-bold text-text-primary dark:text-white mb-4">{t('auth.checkYourEmail')}</h2>
             <p className="text-text-secondary dark:text-gray-400 mb-6 leading-relaxed">
-              We've sent a password reset link to <strong>{email}</strong>. 
-              Click the link in the email to reset your password.
+              {t('auth.resetLinkSentTo', { email })}
             </p>
             
             <div className="space-y-4">
               <p className="text-sm text-text-secondary dark:text-gray-400">
-                Didn't receive the email? Check your spam folder or try again.
+                {t('auth.didntReceiveEmail')}
               </p>
               
               <div className="flex flex-col space-y-3">
@@ -73,14 +74,14 @@ const ForgotPassword: React.FC = () => {
                   }}
                   className="w-full bg-primary hover:bg-red-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200"
                 >
-                  Try Again
+                  {t('auth.tryAgain')}
                 </button>
                 
                 <Link
                   to="/login"
                   className="w-full bg-secondary dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-text-primary dark:text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-center"
                 >
-                  Back to Login
+                  {t('auth.backToLogin')}
                 </Link>
               </div>
             </div>
@@ -99,9 +100,9 @@ const ForgotPassword: React.FC = () => {
             <MapPin className="h-10 w-10 text-primary" />
             <span className="text-2xl font-bold text-text-primary dark:text-white">TripPlanner</span>
           </div>
-          <h2 className="text-3xl font-bold text-text-primary dark:text-white">Forgot Password?</h2>
+          <h2 className="text-3xl font-bold text-text-primary dark:text-white">{t('auth.forgotPasswordTitle')}</h2>
           <p className="mt-2 text-text-secondary dark:text-gray-400">
-            No worries! Enter your email and we'll send you a reset link
+            {t('auth.forgotPasswordSubtitle')}
           </p>
         </div>
 
@@ -112,7 +113,7 @@ const ForgotPassword: React.FC = () => {
               <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 flex items-start space-x-3">
                 <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
                 <div>
-                  <h4 className="text-sm font-medium text-red-800 dark:text-red-400">Error</h4>
+                  <h4 className="text-sm font-medium text-red-800 dark:text-red-400">{t('common.error')}</h4>
                   <p className="text-sm text-red-700 dark:text-red-300 mt-1">{error}</p>
                 </div>
               </div>
@@ -120,7 +121,7 @@ const ForgotPassword: React.FC = () => {
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-                Email Address
+                {t('auth.email')}
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-text-secondary dark:text-gray-400" />
@@ -132,16 +133,15 @@ const ForgotPassword: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-text-primary dark:text-white"
-                  placeholder="Enter your email address"
+                  placeholder={t('auth.emailPlaceholder')}
                 />
               </div>
               <p className="text-xs text-text-secondary dark:text-gray-400 mt-2">
-                We'll send a password reset link to this email address
+                {t('auth.resetEmailNote')}
               </p>
             </div>
 
             <button
-              
               type="submit"
               disabled={loading}
               className="w-full bg-primary hover:bg-red-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
@@ -149,7 +149,7 @@ const ForgotPassword: React.FC = () => {
               {loading && (
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
               )}
-              <span>{loading ? 'Sending Reset Link...' : 'Send Reset Link'}</span>
+              <span>{loading ? t('auth.sendingResetLink') : t('auth.sendResetLink')}</span>
             </button>
 
             <div className="text-center">
@@ -158,7 +158,7 @@ const ForgotPassword: React.FC = () => {
                 className="inline-flex items-center space-x-2 text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-red-400 font-medium transition-colors group"
               >
                 <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-                <span>Back to Login</span>
+                <span>{t('auth.backToLogin')}</span>
               </Link>
             </div>
           </form>
@@ -166,20 +166,20 @@ const ForgotPassword: React.FC = () => {
 
         {/* Additional Help */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-apple dark:shadow-gray-900/20 p-6">
-          <h3 className="text-sm font-semibold text-text-primary dark:text-white mb-3">Need Help?</h3>
+          <h3 className="text-sm font-semibold text-text-primary dark:text-white mb-3">{t('auth.needHelp')}</h3>
           <div className="space-y-2 text-sm text-text-secondary dark:text-gray-400">
-            <p>• Make sure to check your spam/junk folder</p>
-            <p>• The reset link will expire in 24 hours</p>
-            <p>• If you continue having issues, contact support</p>
+            <p>{t('auth.helpTip1')}</p>
+            <p>{t('auth.helpTip2')}</p>
+            <p>{t('auth.helpTip3')}</p>
           </div>
         </div>
 
         {/* Sign Up Link */}
         <div className="text-center">
           <p className="text-text-secondary dark:text-gray-400">
-            Don't have an account?{' '}
+            {t('auth.dontHaveAccount')}{' '}
             <Link to="/signup" className="text-primary hover:text-red-600 dark:hover:text-red-400 font-medium transition-colors">
-              Sign up for free
+              {t('auth.signUpForFree')}
             </Link>
           </p>
         </div>

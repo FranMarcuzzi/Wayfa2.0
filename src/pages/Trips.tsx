@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Plus, Search, Filter, RefreshCw } from 'lucide-react';
 import { useTrips } from '../hooks/useTrips';
 import { useQueryClient } from '@tanstack/react-query';
@@ -9,6 +10,7 @@ import TripCard from '../components/Trips/TripCard';
 import { Trip } from '../types';
 
 const Trips: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { trips, isLoading, deleteTrip, isDeleting } = useTrips();
   const { success, error } = useToast();
@@ -25,12 +27,12 @@ const Trips: React.FC = () => {
   });
 
   const handleDelete = async (trip: Trip) => {
-    if (window.confirm(`¿Estás seguro de que quieres eliminar "${trip.title}"? Esta acción no se puede deshacer.`)) {
+    if (window.confirm(t('trips.confirmDelete', { title: trip.title }))) {
       try {
         await deleteTrip(trip.id);
-        success('Trip Deleted', `"${trip.title}" has been deleted successfully`);
+        success(t('trips.tripDeleted'), t('trips.tripDeletedSuccess', { title: trip.title }));
       } catch (err: any) {
-        error('Delete Failed', err.message || 'Failed to delete trip');
+        error(t('trips.deleteFailed'), err.message || t('errors.generic'));
       }
     }
   };
@@ -38,7 +40,7 @@ const Trips: React.FC = () => {
   const handleRefresh = () => {
     queryClient.invalidateQueries({ queryKey: ['trips'] });
     queryClient.refetchQueries({ queryKey: ['trips', user?.id] });
-    success('Refreshed', 'Trip list has been updated');
+    success(t('trips.refreshed'), t('trips.tripListUpdated'));
   };
 
   if (isLoading) {
@@ -62,9 +64,9 @@ const Trips: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-text-primary dark:text-white">My Trips</h1>
+          <h1 className="text-3xl font-bold text-text-primary dark:text-white">{t('trips.myTrips')}</h1>
           <p className="text-text-secondary dark:text-gray-400 mt-2">
-            Manage all your travel adventures
+            {t('trips.subtitle')}
           </p>
         </div>
         
@@ -75,7 +77,7 @@ const Trips: React.FC = () => {
             className="bg-secondary dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-text-primary dark:text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center space-x-2 disabled:opacity-50"
           >
             <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-            <span>Refresh</span>
+            <span>{t('common.refresh')}</span>
           </button>
           
           <Link
@@ -83,7 +85,7 @@ const Trips: React.FC = () => {
             className="bg-primary hover:bg-red-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
           >
             <Plus className="h-5 w-5" />
-            <span>New Trip</span>
+            <span>{t('trips.newTrip')}</span>
           </Link>
         </div>
       </div>
@@ -96,7 +98,7 @@ const Trips: React.FC = () => {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-text-secondary dark:text-gray-400" />
             <input
               type="text"
-              placeholder="Search trips..."
+              placeholder={t('trips.searchTrips')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-text-primary dark:text-white"
@@ -111,11 +113,11 @@ const Trips: React.FC = () => {
               onChange={(e) => setStatusFilter(e.target.value)}
               className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 appearance-none bg-white dark:bg-gray-700 text-text-primary dark:text-white"
             >
-              <option value="all">All Status</option>
-              <option value="planning">Planning</option>
-              <option value="active">Active</option>
-              <option value="completed">Completed</option>
-              <option value="cancelled">Cancelled</option>
+              <option value="all">{t('trips.allStatus')}</option>
+              <option value="planning">{t('trips.status.planning')}</option>
+              <option value="active">{t('trips.status.active')}</option>
+              <option value="completed">{t('trips.status.completed')}</option>
+              <option value="cancelled">{t('trips.status.cancelled')}</option>
             </select>
           </div>
         </div>
@@ -126,7 +128,7 @@ const Trips: React.FC = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 flex items-center space-x-3">
             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-            <span className="text-text-primary dark:text-white font-medium">Deleting trip...</span>
+            <span className="text-text-primary dark:text-white font-medium">{t('trips.deletingTrip')}</span>
           </div>
         </div>
       )}
@@ -136,12 +138,12 @@ const Trips: React.FC = () => {
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-apple dark:shadow-gray-900/20 p-12 text-center">
           <Plus className="h-16 w-16 text-text-secondary dark:text-gray-400 mx-auto mb-4 opacity-50" />
           <h3 className="text-xl font-semibold text-text-primary dark:text-white mb-2">
-            {searchTerm || statusFilter !== 'all' ? 'No trips found' : 'No trips yet'}
+            {searchTerm || statusFilter !== 'all' ? t('trips.noTripsFound') : t('dashboard.noTripsYet')}
           </h3>
           <p className="text-text-secondary dark:text-gray-400 mb-6">
             {searchTerm || statusFilter !== 'all' 
-              ? 'Try adjusting your search or filters'
-              : 'Create your first trip to get started'
+              ? t('trips.tryAdjustingFilters')
+              : t('dashboard.noTripsSubtitle')
             }
           </p>
           <Link
@@ -149,7 +151,7 @@ const Trips: React.FC = () => {
             className="inline-flex items-center space-x-2 bg-primary hover:bg-red-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
           >
             <Plus className="h-5 w-5" />
-            <span>Create Trip</span>
+            <span>{t('dashboard.createTrip')}</span>
           </Link>
         </div>
       ) : (

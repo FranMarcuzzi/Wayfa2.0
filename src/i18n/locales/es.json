@@ -22,7 +22,8 @@
     "yes": "Sí",
     "no": "No",
     "or": "o",
-    "and": "y"
+    "and": "y",
+    "error": "Error"
   },
   "navigation": {
     "dashboard": "Panel",
@@ -56,8 +57,25 @@
     "sendingResetLink": "Enviando Enlace...",
     "checkYourEmail": "Revisa tu Correo",
     "resetLinkSent": "Hemos enviado un enlace de restablecimiento a tu correo",
+    "resetLinkSentTo": "Hemos enviado un enlace de restablecimiento a {{email}}. Haz clic en el enlace del correo para restablecer tu contraseña.",
     "forgotPasswordTitle": "¿Olvidaste tu Contraseña?",
-    "forgotPasswordSubtitle": "¡No te preocupes! Ingresa tu correo y te enviaremos un enlace"
+    "forgotPasswordSubtitle": "¡No te preocupes! Ingresa tu correo y te enviaremos un enlace",
+    "emailPlaceholder": "Ingresa tu correo electrónico",
+    "passwordPlaceholder": "Ingresa tu contraseña",
+    "fullNamePlaceholder": "Ingresa tu nombre completo",
+    "confirmPasswordPlaceholder": "Confirma tu contraseña",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden",
+    "passwordTooShort": "La contraseña debe tener al menos 6 caracteres",
+    "emailRequired": "Por favor ingresa tu correo electrónico",
+    "resetFailed": "Error al enviar el correo de restablecimiento",
+    "didntReceiveEmail": "¿No recibiste el correo? Revisa tu carpeta de spam o intenta de nuevo.",
+    "tryAgain": "Intentar de Nuevo",
+    "needHelp": "¿Necesitas Ayuda?",
+    "helpTip1": "• Asegúrate de revisar tu carpeta de spam/correo no deseado",
+    "helpTip2": "• El enlace de restablecimiento expirará en 24 horas",
+    "helpTip3": "• Si continúas teniendo problemas, contacta soporte",
+    "resetEmailNote": "Enviaremos un enlace de restablecimiento a este correo electrónico",
+    "loginRequired": "Debes iniciar sesión para crear un viaje"
   },
   "dashboard": {
     "welcomeBack": "¡Bienvenido de vuelta, {{name}}!",
@@ -97,6 +115,7 @@
     "deleteFailed": "Error al Eliminar",
     "refreshed": "Actualizado",
     "tripListUpdated": "La lista de viajes ha sido actualizada",
+    "deletingTrip": "Eliminando viaje...",
     "status": {
       "planning": "Planificando",
       "active": "Activo",
@@ -106,6 +125,7 @@
     "form": {
       "title": "Título del Viaje",
       "titleRequired": "El título del viaje es requerido",
+      "titlePlaceholder": "Ingresa el título del viaje",
       "description": "Descripción",
       "descriptionPlaceholder": "Describe tu viaje...",
       "destination": "Destino",
