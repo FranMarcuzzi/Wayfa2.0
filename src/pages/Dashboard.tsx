@@ -1,0 +1,180 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Plus, TrendingUp } from 'lucide-react';
+import { useAuth } from '../hooks/useAuth';
+import { useTrips, useTripStats } from '../hooks/useTrips';
+import DashboardStats from '../components/Dashboard/DashboardStats';
+import RecentActivity from '../components/Dashboard/RecentActivity';
+import TripCard from '../components/Trips/TripCard';
+
+const Dashboard: React.FC = () => {
+  const { user } = useAuth();
+  const { trips, isLoading: tripsLoading, error: tripsError } = useTrips();
+  const { data: stats, isLoading: statsLoading, error: statsError } = useTripStats();
+
+  console.log('📊 Dashboard - User:', user?.id);
+  console.log('📊 Dashboard - Trips:', trips?.length || 0, trips);
+  console.log('📊 Dashboard - Stats:', stats);
+  console.log('📊 Dashboard - Loading:', { tripsLoading, statsLoading });
+  console.log('📊 Dashboard - Errors:', { tripsError, statsError });
+
+  // Get recent trips (last 4)
+  const recentTrips = trips?.slice(0, 4) || [];
+
+  // Mock recent activities for now - in a real app, this would come from a notifications/activity feed
+  const recentActivities = [
+    {
+      id: '1',
+      type: 'trip_created' as const,
+      title: 'New Trip Created',
+      description: 'A new trip was created',
+      timestamp: new Date().toISOString(),
+    },
+    {
+      id: '2',
+      type: 'expense_added' as const,
+      title: 'Expense Added',
+      description: 'A new expense was recorded',
+      timestamp: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+    },
+  ];
+
+  // Show error state if there are errors
+  if (tripsError || statsError) {
+    console.error('Dashboard errors:', { tripsError, statsError });
+  }
+
+  if (tripsLoading || statsLoading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
+          <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
+          
+          {/* Stats skeleton */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-gray-200 rounded-xl h-24"></div>
+            ))}
+          </div>
+          
+          {/* Content skeleton */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <div className="h-6 bg-gray-200 rounded w-1/4 mb-6"></div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[1, 2].map((i) => (
+                  <div key={i} className="bg-gray-200 rounded-xl h-64"></div>
+                ))}
+              </div>
+            </div>
+            <div className="bg-gray-200 rounded-xl h-96"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-text-primary">
+            Welcome back, {user?.full_name || user?.email?.split('@')[0] || 'Traveler'}!
+          </h1>
+          <p className="text-text-secondary mt-2">
+            Here's what's happening with your trips
+          </p>
+        </div>
+        
+        <Link
+          to="/trips/new"
+          className="bg-primary hover:bg-red-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center space-x-2"
+        >
+          <Plus className="h-5 w-5" />
+          <span>New Trip</span>
+        </Link>
+      </div>
+
+      {/* Stats */}
+      <DashboardStats 
+        totalTrips={stats?.totalTrips || 0}
+        activeTrips={stats?.activeTrips || 0}
+        totalParticipants={stats?.totalParticipants || 0}
+        totalExpenses={stats?.totalExpenses || 0}
+      />
+
+      {/* Main Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Recent Trips */}
+        <div className="lg:col-span-2">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-text-primary">Recent Trips</h2>
+            <Link
+              to="/trips"
+              className="text-primary hover:text-red-600 font-medium transition-colors flex items-center space-x-1"
+            >
+              <span>View All</span>
+              <TrendingUp className="h-4 w-4" />
+            </Link>
+          </div>
+
+          {recentTrips.length === 0 ? (
+            <div className="bg-white rounded-xl shadow-apple p-8 text-center">
+              <div className="text-text-secondary mb-4">
+                <Plus className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p className="text-lg font-medium">No trips yet</p>
+                <p className="text-sm">Create your first trip to get started</p>
+              </div>
+              <Link
+                to="/trips/new"
+                className="inline-flex items-center space-x-2 bg-primary hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+              >
+                <Plus className="h-4 w-4" />
+                <span>Create Trip</span>
+              </Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {recentTrips.map((trip) => (
+                <TripCard key={trip.id} trip={trip} />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Activity Feed */}
+        <div>
+          <RecentActivity activities={recentActivities} />
+        </div>
+      </div>
+
+      {/* Debug info in development */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="mt-8 p-4 bg-gray-100 rounded-lg text-xs text-gray-600">
+          <p><strong>Debug Info:</strong></p>
+          <p>User ID: {user?.id}</p>
+          <p>Trips loaded: {trips?.length || 0}</p>
+          <p>Stats: {JSON.stringify(stats)}</p>
+          <p>Loading: trips={tripsLoading.toString()}, stats={statsLoading.toString()}</p>
+          {(tripsError || statsError) && (
+            <p className="text-red-600">
+              Errors: {tripsError?.message || ''} {statsError?.message || ''}
+            </p>
+          )}
+          {trips && trips.length > 0 && (
+            <div className="mt-2">
+              <p><strong>Trip IDs:</strong></p>
+              {trips.map(trip => (
+                <p key={trip.id}>- {trip.id}: {trip.title}</p>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Dashboard;
