@@ -332,7 +332,7 @@ const TripPlanning: React.FC = () => {
       {/* Header */}
       <div className="bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <Link 
                 to="/trips" 
@@ -353,13 +353,15 @@ const TripPlanning: React.FC = () => {
               <button className="p-2 hover:bg-secondary rounded-lg transition-colors">
                 <Share2 className="h-5 w-5 text-text-secondary" />
               </button>
+              {/* ✅ BOTÓN DE CAMBIO DE ESTADO - AHORA VISIBLE */}
               {canChangeStatus && (
                 <button 
                   onClick={() => setShowStatusModal(true)}
-                  className="p-2 hover:bg-secondary rounded-lg transition-colors"
+                  className="flex items-center space-x-2 px-3 py-2 bg-primary hover:bg-red-600 text-white rounded-lg transition-colors"
                   title="Change trip status"
                 >
-                  <Settings className="h-5 w-5 text-text-secondary" />
+                  <Settings className="h-4 w-4" />
+                  <span className="text-sm font-medium">Status</span>
                 </button>
               )}
             </div>
@@ -429,6 +431,11 @@ const TripPlanning: React.FC = () => {
           <div className="flex space-x-8">
             {tabs.map((tab) => {
               const Icon = tab.icon;
+              // ✅ OCULTAR TAB DE PEOPLE PARA PARTICIPANTS
+              if (tab.id === 'participants' && userParticipant?.role === 'participant') {
+                return null;
+              }
+              
               return (
                 <button
                   key={tab.id}
