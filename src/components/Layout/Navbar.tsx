@@ -48,8 +48,9 @@ const Navbar: React.FC = () => {
   };
 
   const handleThemeToggle = () => {
-    console.log('🎨 Theme toggle clicked, current isDark:', isDark);
+    console.log('🎨 Theme toggle clicked! Current isDark:', isDark);
     toggleTheme();
+    console.log('🔄 Toggle function called');
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -84,16 +85,17 @@ const Navbar: React.FC = () => {
 
           {/* User Actions */}
           <div className="flex items-center space-x-4">
-            {/* Theme Toggle */}
+            {/* Theme Toggle - MEJORADO */}
             <button
               onClick={handleThemeToggle}
-              className="p-2 text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-red-400 transition-colors duration-200 rounded-lg hover:bg-secondary dark:hover:bg-gray-700"
+              className="p-2 text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-red-400 transition-all duration-200 rounded-lg hover:bg-secondary dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
               title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+              aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
             >
               {isDark ? (
-                <Sun className="h-5 w-5" />
+                <Sun className="h-5 w-5 transform transition-transform duration-200 hover:scale-110" />
               ) : (
-                <Moon className="h-5 w-5" />
+                <Moon className="h-5 w-5 transform transition-transform duration-200 hover:scale-110" />
               )}
             </button>
 
@@ -228,6 +230,24 @@ const Navbar: React.FC = () => {
               >
                 My Trips
               </Link>
+              
+              {/* Mobile Theme Toggle */}
+              <button
+                onClick={handleThemeToggle}
+                className="flex items-center space-x-2 px-4 py-2 text-text-primary dark:text-gray-300 hover:bg-secondary dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
+              >
+                {isDark ? (
+                  <>
+                    <Sun className="h-4 w-4" />
+                    <span>Light Mode</span>
+                  </>
+                ) : (
+                  <>
+                    <Moon className="h-4 w-4" />
+                    <span>Dark Mode</span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
         )}
