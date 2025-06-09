@@ -11,6 +11,8 @@ import Trips from './pages/Trips';
 import CreateTrip from './pages/CreateTrip';
 import TripPlanning from './pages/TripPlanning';
 import Settings from './pages/Settings';
+import ToastContainer from './components/UI/ToastContainer';
+import { useToast } from './hooks/useToast';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,9 +25,11 @@ const queryClient = new QueryClient({
   },
 });
 
-function App() {
+function AppContent() {
+  const { toasts, removeToast } = useToast();
+
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <Router>
         <Routes>
           {/* Public Routes */}
@@ -35,7 +39,7 @@ function App() {
           
           {/* Protected Routes */}
           <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-            <Route index element={<Navigate to="/dashboard\" replace />} />
+            <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="trips" element={<Trips />} />
             <Route path="trips/new" element={<CreateTrip />} />
@@ -44,6 +48,17 @@ function App() {
           </Route>
         </Routes>
       </Router>
+      
+      {/* Toast Container */}
+      <ToastContainer toasts={toasts} onClose={removeToast} />
+    </>
+  );
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AppContent />
     </QueryClientProvider>
   );
 }

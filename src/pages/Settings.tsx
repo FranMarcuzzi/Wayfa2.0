@@ -6,8 +6,6 @@ import { useTheme } from '../hooks/useTheme';
 const Settings: React.FC = () => {
   const { theme, setTheme, isDark, toggleTheme } = useTheme();
 
-  console.log('⚙️ Settings - Current theme:', theme, 'isDark:', isDark);
-
   const themeOptions = [
     {
       value: 'light' as const,
@@ -26,19 +24,10 @@ const Settings: React.FC = () => {
   ];
 
   const handleThemeChange = (newTheme: 'light' | 'dark') => {
-    console.log('🎨 Settings: Changing theme to', newTheme);
-    console.log('📋 Before change - DOM classes:', document.documentElement.classList.toString());
-    
     setTheme(newTheme);
-    
-    // Verificar después del cambio
-    setTimeout(() => {
-      console.log('📋 After change - DOM classes:', document.documentElement.classList.toString());
-    }, 100);
   };
 
   const handleQuickToggle = () => {
-    console.log('⚡ Settings: Quick toggle clicked');
     toggleTheme();
   };
 
@@ -162,19 +151,6 @@ const Settings: React.FC = () => {
                 </button>
               );
             })}
-          </div>
-
-          {/* Debug Info - TEMPORAL */}
-          <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <h4 className="font-medium text-text-primary dark:text-white mb-2">
-              🔧 Debug Info
-            </h4>
-            <div className="text-sm text-text-secondary dark:text-gray-400 space-y-1">
-              <p>Current theme: <strong>{theme}</strong></p>
-              <p>Is dark: <strong>{isDark.toString()}</strong></p>
-              <p>DOM classes: <strong>{document.documentElement.classList.toString()}</strong></p>
-              <p>LocalStorage: <strong>{localStorage.getItem('theme') || 'not set'}</strong></p>
-            </div>
           </div>
 
           {/* Theme Preview Section */}

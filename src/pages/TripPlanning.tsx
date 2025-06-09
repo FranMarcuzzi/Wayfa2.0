@@ -37,6 +37,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
+import { useToast } from '../hooks/useToast';
 import { useInvitations } from '../hooks/useInvitations';
 import { useTripParticipants } from '../hooks/useTripParticipants';
 import ItineraryTab from '../components/TripPlanning/ItineraryTab';
@@ -48,6 +49,7 @@ import { format, differenceInDays } from 'date-fns';
 const TripPlanning: React.FC = () => {
   const { tripId } = useParams();
   const { user } = useAuth();
+  const { success, error, warning, info } = useToast();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState('overview');
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -116,10 +118,14 @@ const TripPlanning: React.FC = () => {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['trip', tripId] });
       queryClient.invalidateQueries({ queryKey: ['trips'] });
       setShowStatusModal(false);
+      success('Status Updated', `Trip status changed to ${data.status}`);
+    },
+    onError: (err: any) => {
+      error('Update Failed', err.message || 'Failed to update trip status');
     },
   });
 
@@ -164,6 +170,10 @@ const TripPlanning: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trip', tripId] });
       setShowPhotoUpload(false);
+      success('Photo Updated', 'Cover photo uploaded successfully');
+    },
+    onError: (err: any) => {
+      error('Upload Failed', err.message || 'Failed to upload photo');
     },
   });
 
@@ -176,11 +186,11 @@ const TripPlanning: React.FC = () => {
   const isOwner = trip && trip.owner_id === user?.id;
   const userParticipant = participants.find(p => p.user_id === user?.id);
   
-  // ✅ NUEVO: Permisos más granulares
+  // Permisos más granulares
   const canEdit = isOwner || userParticipant?.role === 'organizer' || userParticipant?.role === 'participant';
-  const canInvite = isOwner || userParticipant?.role === 'organizer'; // Solo owners y organizers pueden invitar
-  const canManagePhoto = isOwner; // Solo owner puede cambiar foto
-  const canChangeStatus = isOwner; // Solo owner puede cambiar estado
+  const canInvite = isOwner || userParticipant?.role === 'organizer';
+  const canManagePhoto = isOwner;
+  const canChangeStatus = isOwner;
 
   const handleInviteUser = async () => {
     if (!tripId || !inviteEmail.trim()) return;
@@ -194,9 +204,9 @@ const TripPlanning: React.FC = () => {
 
       setInviteEmail('');
       setShowInviteModal(false);
-      alert('Invitation sent successfully!');
-    } catch (error: any) {
-      alert(error.message || 'Failed to send invitation');
+      success('Invitation Sent', `Invitation sent to ${inviteEmail.trim()}`);
+    } catch (err: any) {
+      error('Invitation Failed', err.message || 'Failed to send invitation');
     }
   };
 
@@ -207,8 +217,8 @@ const TripPlanning: React.FC = () => {
     setIsUploadingPhoto(true);
     try {
       await uploadPhotoMutation.mutateAsync(file);
-    } catch (error: any) {
-      alert(error.message || 'Failed to upload photo');
+    } catch (err: any) {
+      error('Upload Failed', err.message || 'Failed to upload photo');
     } finally {
       setIsUploadingPhoto(false);
     }
@@ -216,6 +226,24 @@ const TripPlanning: React.FC = () => {
 
   const handleStatusChange = (newStatus: Trip['status']) => {
     updateTripStatusMutation.mutate(newStatus);
+  };
+
+  const handleDeleteInvitation = async (invitationId: string, email: string) => {
+    try {
+      await deleteInvitation(invitationId);
+      warning('Invitation Cancelled', `Invitation to ${email} has been cancelled`);
+    } catch (err: any) {
+      error('Delete Failed', err.message || 'Failed to cancel invitation');
+    }
+  };
+
+  const handleRemoveParticipant = async (participantId: string, userName: string) => {
+    try {
+      await removeParticipant(participantId);
+      info('Participant Removed', `${userName} has been removed from the trip`);
+    } catch (err: any) {
+      error('Remove Failed', err.message || 'Failed to remove participant');
+    }
   };
 
   if (tripLoading) {
@@ -353,7 +381,6 @@ const TripPlanning: React.FC = () => {
               <button className="p-2 hover:bg-secondary dark:hover:bg-gray-700 rounded-lg transition-colors">
                 <Share2 className="h-5 w-5 text-text-secondary dark:text-gray-400" />
               </button>
-              {/* ✅ BOTÓN DE CAMBIO DE ESTADO - AHORA VISIBLE */}
               {canChangeStatus && (
                 <button 
                   onClick={() => setShowStatusModal(true)}
@@ -431,7 +458,7 @@ const TripPlanning: React.FC = () => {
           <div className="flex space-x-8">
             {tabs.map((tab) => {
               const Icon = tab.icon;
-              // ✅ OCULTAR TAB DE PEOPLE PARA PARTICIPANTS
+              // Ocultar tab de people para participants
               if (tab.id === 'participants' && userParticipant?.role === 'participant') {
                 return null;
               }
@@ -655,7 +682,7 @@ const TripPlanning: React.FC = () => {
                           </div>
                           {isOwner && (
                             <button
-                              onClick={() => deleteInvitation(invitation.id)}
+                              onClick={() => handleDeleteInvitation(invitation.id, invitation.email)}
                               className="text-red-500 hover:text-red-700 dark:hover:text-red-400"
                             >
                               <X className="h-3 w-3" />
@@ -744,7 +771,7 @@ const TripPlanning: React.FC = () => {
                           <option value="guest">Guest</option>
                         </select>
                         <button
-                          onClick={() => removeParticipant(participant.id)}
+                          onClick={() => handleRemoveParticipant(participant.id, participant.user?.full_name || participant.user?.email || 'Unknown User')}
                           className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
                         >
                           <Trash2 className="h-4 w-4 text-red-500" />
@@ -770,7 +797,7 @@ const TripPlanning: React.FC = () => {
                         </div>
                         {isOwner && (
                           <button
-                            onClick={() => deleteInvitation(invitation.id)}
+                            onClick={() => handleDeleteInvitation(invitation.id, invitation.email)}
                             className="text-red-500 hover:text-red-700 dark:hover:text-red-400 p-2"
                           >
                             <Trash2 className="h-4 w-4" />
