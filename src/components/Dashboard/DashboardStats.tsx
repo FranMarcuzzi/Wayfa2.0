@@ -19,29 +19,29 @@ const DashboardStats: React.FC<StatsProps> = ({
       title: 'Total Trips',
       value: totalTrips,
       icon: MapPin,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
+      color: 'text-blue-600 dark:text-blue-400',
+      bgColor: 'bg-blue-50 dark:bg-blue-900/20',
     },
     {
       title: 'Active Trips',
       value: activeTrips,
       icon: Calendar,
-      color: 'text-primary',
-      bgColor: 'bg-red-50',
+      color: 'text-primary dark:text-red-400',
+      bgColor: 'bg-red-50 dark:bg-red-900/20',
     },
     {
       title: 'Trip Members',
       value: totalParticipants,
       icon: Users,
-      color: 'text-green-600',
-      bgColor: 'bg-green-50',
+      color: 'text-green-600 dark:text-green-400',
+      bgColor: 'bg-green-50 dark:bg-green-900/20',
     },
     {
       title: 'Total Expenses',
       value: `$${totalExpenses.toLocaleString()}`,
       icon: DollarSign,
-      color: 'text-yellow-600',
-      bgColor: 'bg-yellow-50',
+      color: 'text-yellow-600 dark:text-yellow-400',
+      bgColor: 'bg-yellow-50 dark:bg-yellow-900/20',
     },
   ];
 
@@ -52,12 +52,12 @@ const DashboardStats: React.FC<StatsProps> = ({
         return (
           <div
             key={index}
-            className="bg-white rounded-xl shadow-apple p-6 hover:shadow-apple-lg transition-shadow duration-200"
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-apple dark:shadow-gray-900/20 p-6 hover:shadow-apple-lg dark:hover:shadow-gray-900/30 transition-shadow duration-200"
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-text-secondary text-sm font-medium">{stat.title}</p>
-                <p className="text-2xl font-bold text-text-primary mt-1">{stat.value}</p>
+                <p className="text-text-secondary dark:text-gray-400 text-sm font-medium">{stat.title}</p>
+                <p className="text-2xl font-bold text-text-primary dark:text-white mt-1">{stat.value}</p>
               </div>
               <div className={`${stat.bgColor} ${stat.color} p-3 rounded-lg`}>
                 <Icon className="h-6 w-6" />

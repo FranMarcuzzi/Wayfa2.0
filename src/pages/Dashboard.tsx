@@ -48,27 +48,27 @@ const Dashboard: React.FC = () => {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
-          <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
+          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-4"></div>
+          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-8"></div>
           
           {/* Stats skeleton */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="bg-gray-200 rounded-xl h-24"></div>
+              <div key={i} className="bg-gray-200 dark:bg-gray-700 rounded-xl h-24"></div>
             ))}
           </div>
           
           {/* Content skeleton */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              <div className="h-6 bg-gray-200 rounded w-1/4 mb-6"></div>
+              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-6"></div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[1, 2].map((i) => (
-                  <div key={i} className="bg-gray-200 rounded-xl h-64"></div>
+                  <div key={i} className="bg-gray-200 dark:bg-gray-700 rounded-xl h-64"></div>
                 ))}
               </div>
             </div>
-            <div className="bg-gray-200 rounded-xl h-96"></div>
+            <div className="bg-gray-200 dark:bg-gray-700 rounded-xl h-96"></div>
           </div>
         </div>
       </div>
@@ -80,10 +80,10 @@ const Dashboard: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-text-primary">
+          <h1 className="text-3xl font-bold text-text-primary dark:text-white">
             Welcome back, {user?.full_name || user?.email?.split('@')[0] || 'Traveler'}!
           </h1>
-          <p className="text-text-secondary mt-2">
+          <p className="text-text-secondary dark:text-gray-400 mt-2">
             Here's what's happening with your trips
           </p>
         </div>
@@ -110,10 +110,10 @@ const Dashboard: React.FC = () => {
         {/* Recent Trips */}
         <div className="lg:col-span-2">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-text-primary">Recent Trips</h2>
+            <h2 className="text-xl font-semibold text-text-primary dark:text-white">Recent Trips</h2>
             <Link
               to="/trips"
-              className="text-primary hover:text-red-600 font-medium transition-colors flex items-center space-x-1"
+              className="text-primary hover:text-red-600 dark:hover:text-red-400 font-medium transition-colors flex items-center space-x-1"
             >
               <span>View All</span>
               <TrendingUp className="h-4 w-4" />
@@ -121,8 +121,8 @@ const Dashboard: React.FC = () => {
           </div>
 
           {recentTrips.length === 0 ? (
-            <div className="bg-white rounded-xl shadow-apple p-8 text-center">
-              <div className="text-text-secondary mb-4">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-apple dark:shadow-gray-900/20 p-8 text-center">
+              <div className="text-text-secondary dark:text-gray-400 mb-4">
                 <Plus className="h-12 w-12 mx-auto mb-4 opacity-50" />
                 <p className="text-lg font-medium">No trips yet</p>
                 <p className="text-sm">Create your first trip to get started</p>
@@ -152,14 +152,14 @@ const Dashboard: React.FC = () => {
 
       {/* Debug info in development */}
       {process.env.NODE_ENV === 'development' && (
-        <div className="mt-8 p-4 bg-gray-100 rounded-lg text-xs text-gray-600">
+        <div className="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-xs text-gray-600 dark:text-gray-400">
           <p><strong>Debug Info:</strong></p>
           <p>User ID: {user?.id}</p>
           <p>Trips loaded: {trips?.length || 0}</p>
           <p>Stats: {JSON.stringify(stats)}</p>
           <p>Loading: trips={tripsLoading.toString()}, stats={statsLoading.toString()}</p>
           {(tripsError || statsError) && (
-            <p className="text-red-600">
+            <p className="text-red-600 dark:text-red-400">
               Errors: {tripsError?.message || ''} {statsError?.message || ''}
             </p>
           )}

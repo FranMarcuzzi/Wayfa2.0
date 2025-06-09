@@ -40,33 +40,33 @@ const RecentActivity: React.FC<RecentActivityProps> = ({ activities }) => {
   const getActivityColor = (type: Activity['type']) => {
     switch (type) {
       case 'trip_created':
-        return 'text-blue-600 bg-blue-50';
+        return 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20';
       case 'expense_added':
-        return 'text-green-600 bg-green-50';
+        return 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20';
       case 'user_joined':
-        return 'text-purple-600 bg-purple-50';
+        return 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20';
       case 'poll_created':
-        return 'text-primary bg-red-50';
+        return 'text-primary dark:text-red-400 bg-red-50 dark:bg-red-900/20';
       default:
-        return 'text-gray-600 bg-gray-50';
+        return 'text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700';
     }
   };
 
   if (activities.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-apple p-6">
-        <h3 className="text-lg font-semibold text-text-primary mb-4">Recent Activity</h3>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-apple dark:shadow-gray-900/20 p-6">
+        <h3 className="text-lg font-semibold text-text-primary dark:text-white mb-4">Recent Activity</h3>
         <div className="text-center py-8">
-          <Clock className="h-12 w-12 text-text-secondary mx-auto mb-4" />
-          <p className="text-text-secondary">No recent activity</p>
+          <Clock className="h-12 w-12 text-text-secondary dark:text-gray-400 mx-auto mb-4" />
+          <p className="text-text-secondary dark:text-gray-400">No recent activity</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-apple p-6">
-      <h3 className="text-lg font-semibold text-text-primary mb-6">Recent Activity</h3>
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-apple dark:shadow-gray-900/20 p-6">
+      <h3 className="text-lg font-semibold text-text-primary dark:text-white mb-6">Recent Activity</h3>
       <div className="space-y-4">
         {activities.map((activity) => {
           const Icon = getActivityIcon(activity.type);
@@ -78,14 +78,14 @@ const RecentActivity: React.FC<RecentActivityProps> = ({ activities }) => {
                 <Icon className="h-4 w-4" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-text-primary font-medium">{activity.title}</p>
-                <p className="text-text-secondary text-sm">{activity.description}</p>
+                <p className="text-text-primary dark:text-white font-medium">{activity.title}</p>
+                <p className="text-text-secondary dark:text-gray-400 text-sm">{activity.description}</p>
                 {activity.tripName && (
-                  <p className="text-text-secondary text-xs mt-1">
+                  <p className="text-text-secondary dark:text-gray-400 text-xs mt-1">
                     Trip: {activity.tripName}
                   </p>
                 )}
-                <p className="text-text-secondary text-xs mt-1">
+                <p className="text-text-secondary dark:text-gray-400 text-xs mt-1">
                   {formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true })}
                 </p>
               </div>
