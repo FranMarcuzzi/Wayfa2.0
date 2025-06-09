@@ -1,3 +1,4 @@
+import logo from "src/assets/ChatGPT Image 9 jun 2025, 18_18_32.png";
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -72,7 +73,11 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <MapPin className="h-8 w-8 text-primary" />
+             <img
+          src={logo}
+          alt="Wayfa Logo"
+          className="h-8 w-8 object-contain"
+        />
             <span className="text-xl font-semibold text-text-primary dark:text-white transition-colors">Wayfa</span>
           </Link>
 
