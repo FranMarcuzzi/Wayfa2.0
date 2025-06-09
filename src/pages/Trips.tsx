@@ -4,12 +4,14 @@ import { Plus, Search, Filter, RefreshCw } from 'lucide-react';
 import { useTrips } from '../hooks/useTrips';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../hooks/useAuth';
+import { useToast } from '../hooks/useToast';
 import TripCard from '../components/Trips/TripCard';
 import { Trip } from '../types';
 
 const Trips: React.FC = () => {
   const { user } = useAuth();
   const { trips, isLoading, deleteTrip, isDeleting } = useTrips();
+  const { success, error } = useToast();
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -26,10 +28,16 @@ const Trips: React.FC = () => {
     return matchesSearch && matchesStatus;
   });
 
-  const handleDelete = (trip: Trip) => {
+  const handleDelete = async (trip: Trip) => {
     if (window.confirm(`¿Estás seguro de que quieres eliminar "${trip.title}"? Esta acción no se puede deshacer.`)) {
       console.log('🗑️ Deleting trip:', trip.id);
-      deleteTrip(trip.id);
+      
+      try {
+        await deleteTrip(trip.id);
+        success('Trip Deleted', `"${trip.title}" has been deleted successfully`);
+      } catch (err: any) {
+        error('Delete Failed', err.message || 'Failed to delete trip');
+      }
     }
   };
 
@@ -37,6 +45,7 @@ const Trips: React.FC = () => {
     console.log('🔄 Manual refresh triggered');
     queryClient.invalidateQueries({ queryKey: ['trips'] });
     queryClient.refetchQueries({ queryKey: ['trips', user?.id] });
+    success('Refreshed', 'Trip list has been updated');
   };
 
   if (isLoading) {
