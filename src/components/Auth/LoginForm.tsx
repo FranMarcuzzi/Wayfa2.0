@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import logo from "../../assets/logo.png";
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/useAuth';
@@ -55,7 +56,11 @@ const LoginForm: React.FC = () => {
         {/* Logo and Header */}
         <div className="text-center">
           <div className="flex items-center justify-center space-x-2 mb-6">
-            <MapPin className="h-10 w-10 text-primary" />
+             <img
+          src={logo}
+          alt="Wayfa Logo"
+          className="h-8 w-8 object-contain"
+        />
             <span className="text-2xl font-bold text-text-primary dark:text-white">Wayfa</span>
           </div>
           <h2 className="text-3xl font-bold text-text-primary dark:text-white">{t('auth.welcomeBack')}</h2>
