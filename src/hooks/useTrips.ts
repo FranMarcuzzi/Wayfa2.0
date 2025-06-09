@@ -16,15 +16,11 @@ export const useTrips = () => {
     queryKey: ['trips', user?.id],
     queryFn: async () => {
       if (!user?.id) {
-        console.log('🚫 No user ID, returning empty trips array');
         return [];
       }
 
-      console.log('🔍 Fetching trips for user:', user.id);
-
       try {
-        // MÉTODO SIMPLE: Solo obtener viajes donde el usuario es owner
-        // Esto debería funcionar siempre
+        // Obtener viajes donde el usuario es owner
         const { data: ownedTrips, error: ownedError } = await supabase
           .from('trips')
           .select('*')
@@ -36,9 +32,7 @@ export const useTrips = () => {
           throw ownedError;
         }
 
-        console.log('✅ Owned trips found:', ownedTrips?.length || 0);
-
-        // Intentar obtener viajes donde es participante (opcional)
+        // Intentar obtener viajes donde es participante
         let participantTrips: Trip[] = [];
         try {
           const { data: participantData, error: participantError } = await supabase
@@ -57,18 +51,14 @@ export const useTrips = () => {
 
             if (!tripsError && trips) {
               participantTrips = trips;
-              console.log('✅ Participant trips found:', participantTrips.length);
             }
           }
         } catch (participantError) {
           console.warn('⚠️ Could not fetch participant trips:', participantError);
-          // No es crítico, continuamos solo con owned trips
         }
 
         // Combinar todos los viajes
         const allTrips = [...(ownedTrips || []), ...participantTrips];
-        
-        console.log('📋 Total trips:', allTrips.length);
         return allTrips;
 
       } catch (error) {
@@ -78,16 +68,14 @@ export const useTrips = () => {
     },
     enabled: !!user?.id,
     retry: 2,
-    staleTime: 5000, // 5 seconds
-    refetchOnWindowFocus: true,
+    staleTime: 5000,
+    refetchOnWindowFocus: false,
     refetchOnMount: true,
   });
 
   // Create trip mutation
   const createTripMutation = useMutation({
     mutationFn: async (tripData: Omit<Trip, 'id' | 'created_at' | 'updated_at' | 'participants'>) => {
-      console.log('🚀 Creating trip:', tripData);
-
       // Crear el viaje
       const { data: trip, error: tripError } = await supabase
         .from('trips')
@@ -96,11 +84,8 @@ export const useTrips = () => {
         .single();
 
       if (tripError) {
-        console.error('❌ Error creating trip:', tripError);
         throw new Error(`Failed to create trip: ${tripError.message}`);
       }
-
-      console.log('✅ Trip created successfully:', trip);
 
       // Agregar el creador como organizador
       const { error: participantError } = await supabase
@@ -112,18 +97,12 @@ export const useTrips = () => {
         }]);
 
       if (participantError) {
-        console.error('❌ Error adding trip participant:', participantError);
-        // No lanzar error aquí, el viaje ya se creó
-        console.warn('⚠️ Trip created but could not add participant. This might affect visibility.');
-      } else {
-        console.log('✅ Trip creator added as organizer');
+        console.warn('⚠️ Trip created but could not add participant:', participantError);
       }
 
       return trip;
     },
     onSuccess: (data) => {
-      console.log('🎉 Trip creation successful, refreshing data');
-      
       // Invalidar y refrescar inmediatamente
       queryClient.invalidateQueries({ queryKey: ['trips'] });
       queryClient.invalidateQueries({ queryKey: ['trip-stats'] });
@@ -131,11 +110,6 @@ export const useTrips = () => {
       
       // Forzar refetch inmediato
       queryClient.refetchQueries({ queryKey: ['trips', user?.id] });
-      
-      // También refrescar después de un pequeño delay
-      setTimeout(() => {
-        queryClient.refetchQueries({ queryKey: ['trips', user?.id] });
-      }, 1000);
     },
     onError: (error) => {
       console.error('❌ Trip creation failed:', error);
@@ -145,8 +119,6 @@ export const useTrips = () => {
   // Update trip mutation
   const updateTripMutation = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<Trip> & { id: string }) => {
-      console.log('📝 Updating trip:', id, updates);
-
       const { data, error } = await supabase
         .from('trips')
         .update(updates)
@@ -155,39 +127,32 @@ export const useTrips = () => {
         .single();
 
       if (error) {
-        console.error('❌ Error updating trip:', error);
         throw error;
       }
 
-      console.log('✅ Trip updated successfully:', data);
       return data;
     },
     onSuccess: () => {
-      console.log('🔄 Trip update successful, invalidating queries');
       queryClient.invalidateQueries({ queryKey: ['trips'] });
       queryClient.invalidateQueries({ queryKey: ['trip-stats'] });
     },
   });
 
-  // Delete trip mutation
+  // Delete trip mutation - ARREGLADO
   const deleteTripMutation = useMutation({
     mutationFn: async (tripId: string) => {
-      console.log('🗑️ Deleting trip:', tripId);
-
       const { error } = await supabase
         .from('trips')
         .delete()
         .eq('id', tripId);
 
       if (error) {
-        console.error('❌ Error deleting trip:', error);
         throw new Error(`Failed to delete trip: ${error.message}`);
       }
 
-      console.log('✅ Trip deleted successfully');
+      return tripId;
     },
     onSuccess: () => {
-      console.log('🔄 Trip deletion successful, invalidating queries');
       queryClient.invalidateQueries({ queryKey: ['trips'] });
       queryClient.invalidateQueries({ queryKey: ['trip-stats'] });
     },
@@ -202,7 +167,7 @@ export const useTrips = () => {
     error,
     createTrip: createTripMutation.mutate,
     updateTrip: updateTripMutation.mutate,
-    deleteTrip: deleteTripMutation.mutate,
+    deleteTrip: deleteTripMutation.mutateAsync, // CAMBIADO A mutateAsync para mejor manejo de errores
     isCreating: createTripMutation.isPending,
     isUpdating: updateTripMutation.isPending,
     isDeleting: deleteTripMutation.isPending,
@@ -217,7 +182,6 @@ export const useTripStats = () => {
     queryKey: ['trip-stats', user?.id],
     queryFn: async () => {
       if (!user?.id) {
-        console.log('🚫 No user ID for stats, returning zeros');
         return {
           totalTrips: 0,
           activeTrips: 0,
@@ -225,8 +189,6 @@ export const useTripStats = () => {
           totalExpenses: 0,
         };
       }
-
-      console.log('📊 Fetching trip stats for user:', user.id);
 
       try {
         // Obtener viajes donde el usuario es owner
@@ -236,7 +198,6 @@ export const useTripStats = () => {
           .eq('owner_id', user.id);
 
         if (ownedError) {
-          console.error('❌ Error fetching owned trips for stats:', ownedError);
           throw ownedError;
         }
 
@@ -248,7 +209,6 @@ export const useTripStats = () => {
 
         if (participantError) {
           console.error('❌ Error fetching participant data for stats:', participantError);
-          // No lanzar error, usar solo owned trips
         }
 
         // Combinar IDs de viajes
@@ -273,7 +233,6 @@ export const useTripStats = () => {
 
         if (allTripsError) {
           console.error('❌ Error fetching all trips data:', allTripsError);
-          // Usar solo owned trips para el conteo
         }
 
         // Obtener total de participantes
@@ -306,7 +265,6 @@ export const useTripStats = () => {
           totalExpenses,
         };
 
-        console.log('📊 Trip stats calculated:', stats);
         return stats;
       } catch (error) {
         console.error('❌ Error in useTripStats:', error);
@@ -320,6 +278,6 @@ export const useTripStats = () => {
     },
     enabled: !!user?.id,
     retry: 1,
-    staleTime: 30000, // 30 seconds
+    staleTime: 30000,
   });
 };

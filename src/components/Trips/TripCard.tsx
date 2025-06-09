@@ -9,8 +9,7 @@ import {
   MoreVertical,
   Trash2,
   Settings,
-  Eye,
-  ExternalLink
+  Eye
 } from 'lucide-react';
 import { Trip } from '../../types';
 import { useAuth } from '../../hooks/useAuth';
@@ -57,10 +56,9 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
     
     try {
       setIsNavigating(true);
-      console.log('🚀 Navigating to trip planning:', trip.id);
       
-      // Usar navigate con replace para evitar problemas de historial
-      await navigate(`/trips/${trip.id}/plan`, { replace: false });
+      // Usar navigate de forma más robusta
+      navigate(`/trips/${trip.id}/plan`);
       
     } catch (error) {
       console.error('❌ Navigation error:', error);
@@ -186,14 +184,6 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
             <Eye className="h-4 w-4" />
           </button>
         </div>
-
-        {/* Link de respaldo invisible para SEO */}
-        <Link
-          to={`/trips/${trip.id}/plan`}
-          className="absolute inset-0 z-0"
-          aria-label={`View ${trip.title} trip details`}
-          tabIndex={-1}
-        />
       </div>
     </div>
   );
