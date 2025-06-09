@@ -66,7 +66,7 @@ const TripPlanning: React.FC = () => {
 
   // Hooks
   const { invitations, createInvitation, deleteInvitation, isCreating } = useInvitations(tripId);
-  const { participants, removeParticipant, updateParticipantRole } = useTripParticipants(tripId);
+  const { participants, removeParticipant, updateParticipantRole, isRemoving } = useTripParticipants(tripId);
 
   // Fetch trip data
   const { data: trip, isLoading: tripLoading, error: tripError } = useQuery({
@@ -195,6 +195,7 @@ const TripPlanning: React.FC = () => {
   const canInvite = isOwner || userParticipant?.role === 'organizer';
   const canManagePhoto = isOwner;
   const canChangeStatus = isOwner;
+  const canRemoveParticipants = isOwner || userParticipant?.role === 'organizer';
 
   const handleInviteUser = async () => {
     if (!tripId || !inviteEmail.trim()) return;
@@ -242,11 +243,18 @@ const TripPlanning: React.FC = () => {
   };
 
   const handleRemoveParticipant = async (participantId: string, userName: string) => {
-    try {
-      await removeParticipant(participantId);
-      info('Participant Removed', `${userName} has been removed from the trip`);
-    } catch (err: any) {
-      error('Remove Failed', err.message || 'Failed to remove participant');
+    if (!canRemoveParticipants) {
+      error('Permission Denied', 'You do not have permission to remove participants');
+      return;
+    }
+
+    if (window.confirm(`¿Estás seguro de que quieres eliminar a ${userName} del viaje? Esta acción no se puede deshacer.`)) {
+      try {
+        await removeParticipant(participantId);
+        info('Participant Removed', `${userName} has been removed from the trip`);
+      } catch (err: any) {
+        error('Remove Failed', err.message || 'Failed to remove participant');
+      }
     }
   };
 
@@ -294,7 +302,7 @@ const TripPlanning: React.FC = () => {
     : baseTabs;
 
   // Agregar tab de People al final (con permisos)
-  if (!(userParticipant?.role === 'participant')) {
+  if (canInvite || canRemoveParticipants) {
     tabs.push({ id: 'participants', label: 'People', icon: Users });
   }
 
@@ -751,6 +759,16 @@ const TripPlanning: React.FC = () => {
                 )}
               </div>
 
+              {/* Loading overlay for participant removal */}
+              {isRemoving && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                  <div className="bg-white dark:bg-gray-800 rounded-lg p-6 flex items-center space-x-3">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                    <span className="text-text-primary dark:text-white font-medium">Removing participant...</span>
+                  </div>
+                </div>
+              )}
+
               {/* Participants List */}
               <div className="space-y-4">
                 {participants.map((participant) => (
@@ -769,6 +787,11 @@ const TripPlanning: React.FC = () => {
                           {participant.role === 'organizer' && (
                             <Crown className="h-4 w-4 text-yellow-500" />
                           )}
+                          {participant.user_id === user?.id && (
+                            <span className="text-xs bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-400 px-2 py-1 rounded-full">
+                              You
+                            </span>
+                          )}
                         </div>
                         <p className="text-sm text-text-secondary dark:text-gray-400">{participant.user?.email}</p>
                         <p className="text-xs text-text-secondary dark:text-gray-400 capitalize">
@@ -777,7 +800,7 @@ const TripPlanning: React.FC = () => {
                       </div>
                     </div>
                     
-                    {isOwner && participant.user_id !== user?.id && (
+                    {canRemoveParticipants && participant.user_id !== user?.id && participant.user_id !== trip.owner_id && (
                       <div className="flex items-center space-x-2">
                         <select
                           value={participant.role}
@@ -792,8 +815,13 @@ const TripPlanning: React.FC = () => {
                           <option value="guest">Guest</option>
                         </select>
                         <button
-                          onClick={() => handleRemoveParticipant(participant.id, participant.user?.full_name || participant.user?.email || 'Unknown User')}
-                          className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
+                          onClick={() => handleRemoveParticipant(
+                            participant.id, 
+                            participant.user?.full_name || participant.user?.email || 'Unknown User'
+                          )}
+                          disabled={isRemoving}
+                          className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          title="Remove participant"
                         >
                           <Trash2 className="h-4 w-4 text-red-500" />
                         </button>
@@ -816,7 +844,7 @@ const TripPlanning: React.FC = () => {
                             Invited as {invitation.role} • Expires {format(new Date(invitation.expires_at), 'MMM dd, yyyy')}
                           </p>
                         </div>
-                        {isOwner && (
+                        {canInvite && (
                           <button
                             onClick={() => handleDeleteInvitation(invitation.id, invitation.email)}
                             className="text-red-500 hover:text-red-700 dark:hover:text-red-400 p-2"
