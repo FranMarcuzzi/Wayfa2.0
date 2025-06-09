@@ -9,7 +9,11 @@ const initializeTheme = () => {
   const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   const theme = savedTheme || systemTheme;
   
+  // Apply theme immediately to prevent flash
+  document.documentElement.classList.remove('light', 'dark');
   document.documentElement.classList.add(theme);
+  
+  console.log('🚀 Initial theme set to:', theme);
 };
 
 initializeTheme();

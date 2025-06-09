@@ -28,6 +28,7 @@ const Navbar: React.FC = () => {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
   console.log('🔔 Navbar - User invitations:', userInvitations?.length || 0);
+  console.log('🌙 Navbar - isDark:', isDark);
 
   const handleSignOut = async () => {
     await signOut();
@@ -46,18 +47,23 @@ const Navbar: React.FC = () => {
     }
   };
 
+  const handleThemeToggle = () => {
+    console.log('🎨 Theme toggle clicked, current isDark:', isDark);
+    toggleTheme();
+  };
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleProfileMenu = () => setIsProfileMenuOpen(!isProfileMenuOpen);
   const toggleNotifications = () => setIsNotificationsOpen(!isNotificationsOpen);
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-apple dark:shadow-gray-900/20 border-b border-gray-100 dark:border-gray-700 transition-colors">
+    <nav className="bg-white dark:bg-gray-800 shadow-apple dark:shadow-gray-900/20 border-b border-gray-100 dark:border-gray-700 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <MapPin className="h-8 w-8 text-primary" />
-            <span className="text-xl font-semibold text-text-primary dark:text-white">TripPlanner</span>
+            <span className="text-xl font-semibold text-text-primary dark:text-white transition-colors">TripPlanner</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -80,18 +86,22 @@ const Navbar: React.FC = () => {
           <div className="flex items-center space-x-4">
             {/* Theme Toggle */}
             <button
-              onClick={toggleTheme}
-              className="p-2 text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-red-400 transition-colors duration-200"
+              onClick={handleThemeToggle}
+              className="p-2 text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-red-400 transition-colors duration-200 rounded-lg hover:bg-secondary dark:hover:bg-gray-700"
               title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
             >
-              {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              {isDark ? (
+                <Sun className="h-5 w-5" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
             </button>
 
             {/* Notifications */}
             <div className="relative">
               <button 
                 onClick={toggleNotifications}
-                className="relative p-2 text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-red-400 transition-colors duration-200"
+                className="relative p-2 text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-red-400 transition-colors duration-200 rounded-lg hover:bg-secondary dark:hover:bg-gray-700"
               >
                 <Bell className="h-5 w-5" />
                 {userInvitations && userInvitations.length > 0 && (
@@ -163,7 +173,7 @@ const Navbar: React.FC = () => {
                 <div className="h-8 w-8 bg-primary rounded-full flex items-center justify-center">
                   <User className="h-5 w-5 text-white" />
                 </div>
-                <span className="hidden md:block text-text-primary dark:text-white">
+                <span className="hidden md:block text-text-primary dark:text-white transition-colors">
                   {user?.full_name || user?.email}
                 </span>
               </button>
@@ -193,7 +203,7 @@ const Navbar: React.FC = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMenu}
-              className="md:hidden p-2 text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-red-400 transition-colors duration-200"
+              className="md:hidden p-2 text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-red-400 transition-colors duration-200 rounded-lg hover:bg-secondary dark:hover:bg-gray-700"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>

@@ -6,7 +6,7 @@ export const useTheme = () => {
   const [theme, setTheme] = useState<Theme>(() => {
     // Check localStorage first
     const savedTheme = localStorage.getItem('theme') as Theme;
-    if (savedTheme) {
+    if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
       return savedTheme;
     }
     
@@ -29,15 +29,26 @@ export const useTheme = () => {
     
     // Save to localStorage
     localStorage.setItem('theme', theme);
+    
+    console.log('🎨 Theme changed to:', theme);
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+    setTheme(prevTheme => {
+      const newTheme = prevTheme === 'light' ? 'dark' : 'light';
+      console.log('🔄 Toggling theme from', prevTheme, 'to', newTheme);
+      return newTheme;
+    });
+  };
+
+  const setThemeDirectly = (newTheme: Theme) => {
+    console.log('🎯 Setting theme directly to:', newTheme);
+    setTheme(newTheme);
   };
 
   return {
     theme,
-    setTheme,
+    setTheme: setThemeDirectly,
     toggleTheme,
     isDark: theme === 'dark',
   };
