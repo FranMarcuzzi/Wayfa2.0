@@ -49,38 +49,38 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
       type: 'transport' as const, 
       label: 'Transport', 
       icon: Plane, 
-      color: 'bg-blue-50 text-blue-600',
+      color: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400',
       examples: ['Flight', 'Train', 'Bus', 'Car Rental', 'Taxi']
     },
     { 
       type: 'accommodation' as const, 
       label: 'Hotels', 
       icon: Hotel, 
-      color: 'bg-green-50 text-green-600',
+      color: 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400',
       examples: ['Hotel Check-in', 'Airbnb', 'Hostel', 'Resort']
     },
     { 
       type: 'meal' as const, 
       label: 'Dining', 
       icon: Utensils, 
-      color: 'bg-yellow-50 text-yellow-600',
+      color: 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400',
       examples: ['Breakfast', 'Lunch', 'Dinner', 'Coffee Break']
     },
     { 
       type: 'activity' as const, 
       label: 'Activities', 
       icon: Activity, 
-      color: 'bg-purple-50 text-purple-600',
+      color: 'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
       examples: ['Sightseeing', 'Museum', 'Tour', 'Adventure']
     }
   ];
 
   const typeOptions = [
-    { value: 'activity', label: 'Activity', icon: Activity, color: 'bg-purple-50 text-purple-600' },
-    { value: 'meal', label: 'Meal', icon: Utensils, color: 'bg-yellow-50 text-yellow-600' },
-    { value: 'transport', label: 'Transport', icon: Car, color: 'bg-blue-50 text-blue-600' },
-    { value: 'accommodation', label: 'Accommodation', icon: Hotel, color: 'bg-green-50 text-green-600' },
-    { value: 'other', label: 'Other', icon: MoreHorizontal, color: 'bg-gray-50 text-gray-600' },
+    { value: 'activity', label: 'Activity', icon: Activity, color: 'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400' },
+    { value: 'meal', label: 'Meal', icon: Utensils, color: 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400' },
+    { value: 'transport', label: 'Transport', icon: Car, color: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' },
+    { value: 'accommodation', label: 'Accommodation', icon: Hotel, color: 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400' },
+    { value: 'other', label: 'Other', icon: MoreHorizontal, color: 'bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-400' },
   ];
 
   const getTypeInfo = (type: ItineraryItem['type']) => {
@@ -188,13 +188,13 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
         return (
           <>
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
+              <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                 Transport Type *
               </label>
               <select
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                 required
               >
                 <option value="">Select transport type</option>
@@ -209,26 +209,26 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
             
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-text-primary mb-2">
+                <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                   From
                 </label>
                 <input
                   type="text"
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                   placeholder="Departure location"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-text-primary mb-2">
+                <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                   To
                 </label>
                 <input
                   type="text"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                   placeholder="Arrival location"
                 />
               </div>
@@ -240,13 +240,13 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
         return (
           <>
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
+              <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                 Accommodation Type *
               </label>
               <select
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                 required
               >
                 <option value="">Select accommodation</option>
@@ -259,27 +259,27 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
+              <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                 Property Name
               </label>
               <input
                 type="text"
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                 placeholder="Hotel/property name"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
+              <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                 Notes
               </label>
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={2}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                 placeholder="Confirmation number, special requests..."
               />
             </div>
@@ -290,13 +290,13 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
         return (
           <>
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
+              <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                 Meal Type *
               </label>
               <select
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                 required
               >
                 <option value="">Select meal type</option>
@@ -310,27 +310,27 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
+              <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                 Restaurant/Venue
               </label>
               <input
                 type="text"
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                 placeholder="Restaurant name or location"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
+              <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                 Notes
               </label>
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={2}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                 placeholder="Reservation details, dietary requirements..."
               />
             </div>
@@ -341,13 +341,13 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
         return (
           <>
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
+              <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                 Activity Type *
               </label>
               <select
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                 required
               >
                 <option value="">Select activity</option>
@@ -363,27 +363,27 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
+              <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                 Location/Venue
               </label>
               <input
                 type="text"
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                 placeholder="Where is this activity?"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
+              <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                 Description
               </label>
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={2}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                 placeholder="Activity details, tickets, meeting point..."
               />
             </div>
@@ -393,14 +393,14 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
       default:
         return (
           <div>
-            <label className="block text-sm font-medium text-text-primary mb-2">
+            <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
               Title *
             </label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
               placeholder="Activity title"
               required
             />
@@ -414,15 +414,15 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-xl font-semibold text-text-primary">Trip Itinerary</h3>
-          <p className="text-text-secondary">Plan your daily activities and schedule</p>
+          <h3 className="text-xl font-semibold text-text-primary dark:text-white">Trip Itinerary</h3>
+          <p className="text-text-secondary dark:text-gray-400">Plan your daily activities and schedule</p>
         </div>
       </div>
 
       {/* Quick Actions */}
       {canEdit && (
-        <div className="bg-white rounded-xl shadow-apple p-6">
-          <h4 className="text-lg font-semibold text-text-primary mb-4">Quick Add</h4>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-apple dark:shadow-gray-900/20 p-6">
+          <h4 className="text-lg font-semibold text-text-primary dark:text-white mb-4">Quick Add</h4>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {quickActions.map((action) => {
               const Icon = action.icon;
@@ -430,13 +430,13 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
                 <button
                   key={action.type}
                   onClick={() => handleQuickAction(action.type)}
-                  className="flex flex-col items-center p-4 rounded-lg hover:bg-secondary transition-colors group"
+                  className="flex flex-col items-center p-4 rounded-lg hover:bg-secondary dark:hover:bg-gray-700 transition-colors group"
                 >
                   <div className={`p-3 rounded-lg ${action.color} group-hover:scale-105 transition-transform`}>
                     <Icon className="h-6 w-6" />
                   </div>
-                  <span className="text-sm font-medium text-text-primary mt-2">{action.label}</span>
-                  <span className="text-xs text-text-secondary mt-1">
+                  <span className="text-sm font-medium text-text-primary dark:text-white mt-2">{action.label}</span>
+                  <span className="text-xs text-text-secondary dark:text-gray-400 mt-1">
                     {action.examples.slice(0, 2).join(', ')}...
                   </span>
                 </button>
@@ -448,10 +448,10 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
 
       {/* Itinerary Timeline */}
       {sortedDates.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-apple p-8 text-center">
-          <Calendar className="h-12 w-12 text-text-secondary mx-auto mb-4 opacity-50" />
-          <h4 className="text-lg font-medium text-text-primary mb-2">No activities planned yet</h4>
-          <p className="text-text-secondary mb-4">Start building your itinerary by adding activities, meals, and more</p>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-apple dark:shadow-gray-900/20 p-8 text-center">
+          <Calendar className="h-12 w-12 text-text-secondary dark:text-gray-400 mx-auto mb-4 opacity-50" />
+          <h4 className="text-lg font-medium text-text-primary dark:text-white mb-2">No activities planned yet</h4>
+          <p className="text-text-secondary dark:text-gray-400 mb-4">Start building your itinerary by adding activities, meals, and more</p>
         </div>
       ) : (
         <div className="space-y-6">
@@ -466,8 +466,8 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
             });
 
             return (
-              <div key={date} className="bg-white rounded-xl shadow-apple p-6">
-                <h4 className="text-lg font-semibold text-text-primary mb-4 flex items-center space-x-2">
+              <div key={date} className="bg-white dark:bg-gray-800 rounded-xl shadow-apple dark:shadow-gray-900/20 p-6">
+                <h4 className="text-lg font-semibold text-text-primary dark:text-white mb-4 flex items-center space-x-2">
                   <Calendar className="h-5 w-5 text-primary" />
                   <span>{format(parseISO(date), 'EEEE, MMMM dd, yyyy')}</span>
                 </h4>
@@ -478,7 +478,7 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
                     const Icon = typeInfo.icon;
                     
                     return (
-                      <div key={item.id} className="flex items-start space-x-4 p-4 border border-gray-100 rounded-lg hover:bg-secondary transition-colors">
+                      <div key={item.id} className="flex items-start space-x-4 p-4 border border-gray-100 dark:border-gray-700 rounded-lg hover:bg-secondary dark:hover:bg-gray-700 transition-colors">
                         <div className={`p-2 rounded-lg ${typeInfo.color}`}>
                           <Icon className="h-4 w-4" />
                         </div>
@@ -487,15 +487,15 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
                           <div className="flex items-start justify-between">
                             <div>
                               <div className="flex items-center space-x-2 mb-1">
-                                <h5 className="font-medium text-text-primary">{item.title}</h5>
+                                <h5 className="font-medium text-text-primary dark:text-white">{item.title}</h5>
                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${typeInfo.color}`}>
                                   {typeInfo.label}
                                 </span>
                               </div>
                               {item.description && (
-                                <p className="text-text-secondary text-sm mt-1">{item.description}</p>
+                                <p className="text-text-secondary dark:text-gray-400 text-sm mt-1">{item.description}</p>
                               )}
-                              <div className="flex items-center space-x-4 mt-2 text-sm text-text-secondary">
+                              <div className="flex items-center space-x-4 mt-2 text-sm text-text-secondary dark:text-gray-400">
                                 {item.start_time && (
                                   <div className="flex items-center space-x-1">
                                     <Clock className="h-3 w-3" />
@@ -518,13 +518,13 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
                               <div className="flex items-center space-x-1">
                                 <button
                                   onClick={() => handleEdit(item)}
-                                  className="p-1 hover:bg-gray-100 rounded transition-colors"
+                                  className="p-1 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
                                 >
-                                  <Edit3 className="h-3 w-3 text-text-secondary" />
+                                  <Edit3 className="h-3 w-3 text-text-secondary dark:text-gray-400" />
                                 </button>
                                 <button
                                   onClick={() => handleDelete(item.id)}
-                                  className="p-1 hover:bg-red-50 rounded transition-colors"
+                                  className="p-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
                                 >
                                   <Trash2 className="h-3 w-3 text-red-500" />
                                 </button>
@@ -545,16 +545,16 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
       {/* Add/Edit Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-text-primary">
+              <h3 className="text-lg font-semibold text-text-primary dark:text-white">
                 {editingItem ? 'Edit Activity' : selectedActivityType ? `Add ${quickActions.find(a => a.type === selectedActivityType)?.label}` : 'Add New Activity'}
               </h3>
               <button
                 onClick={resetForm}
-                className="p-2 hover:bg-secondary rounded-lg transition-colors"
+                className="p-2 hover:bg-secondary dark:hover:bg-gray-700 rounded-lg transition-colors"
               >
-                <X className="h-5 w-5 text-text-secondary" />
+                <X className="h-5 w-5 text-text-secondary dark:text-gray-400" />
               </button>
             </div>
 
@@ -564,27 +564,27 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-text-primary mb-2">
+                  <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                     Date *
                   </label>
                   <input
                     type="date"
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                     required
                   />
                 </div>
 
                 {!selectedActivityType && (
                   <div>
-                    <label className="block text-sm font-medium text-text-primary mb-2">
+                    <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                       Type *
                     </label>
                     <select
                       value={formData.type}
                       onChange={(e) => setFormData({ ...formData, type: e.target.value as ItineraryItem['type'] })}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                     >
                       {typeOptions.map(option => (
                         <option key={option.value} value={option.value}>
@@ -598,26 +598,26 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-text-primary mb-2">
+                  <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                     Start Time
                   </label>
                   <input
                     type="time"
                     value={formData.start_time}
                     onChange={(e) => setFormData({ ...formData, start_time: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-text-primary mb-2">
+                  <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                     End Time
                   </label>
                   <input
                     type="time"
                     value={formData.end_time}
                     onChange={(e) => setFormData({ ...formData, end_time: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                   />
                 </div>
               </div>
@@ -626,27 +626,27 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
               {!selectedActivityType && (
                 <>
                   <div>
-                    <label className="block text-sm font-medium text-text-primary mb-2">
+                    <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                       Location
                     </label>
                     <input
                       type="text"
                       value={formData.location}
                       onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                       placeholder="Where is this happening?"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-text-primary mb-2">
+                    <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
                       Description
                     </label>
                     <textarea
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-text-primary dark:text-white"
                       placeholder="Additional details..."
                     />
                   </div>
@@ -657,7 +657,7 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ tripId, isOwner, canEdit })
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="flex-1 px-4 py-2 border border-gray-200 text-text-primary rounded-lg hover:bg-secondary transition-colors"
+                  className="flex-1 px-4 py-2 border border-gray-200 dark:border-gray-600 text-text-primary dark:text-white rounded-lg hover:bg-secondary dark:hover:bg-gray-700 transition-colors"
                 >
                   Cancel
                 </button>
