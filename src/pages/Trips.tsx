@@ -16,10 +16,6 @@ const Trips: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
 
-  console.log('🗂️ Trips Page - User:', user?.id);
-  console.log('🗂️ Trips Page - Trips:', trips?.length || 0, trips);
-  console.log('🗂️ Trips Page - Loading:', isLoading);
-
   const filteredTrips = trips.filter((trip) => {
     const matchesSearch = trip.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          trip.destination.toLowerCase().includes(searchTerm.toLowerCase());
@@ -30,8 +26,6 @@ const Trips: React.FC = () => {
 
   const handleDelete = async (trip: Trip) => {
     if (window.confirm(`¿Estás seguro de que quieres eliminar "${trip.title}"? Esta acción no se puede deshacer.`)) {
-      console.log('🗑️ Deleting trip:', trip.id);
-      
       try {
         await deleteTrip(trip.id);
         success('Trip Deleted', `"${trip.title}" has been deleted successfully`);
@@ -42,7 +36,6 @@ const Trips: React.FC = () => {
   };
 
   const handleRefresh = () => {
-    console.log('🔄 Manual refresh triggered');
     queryClient.invalidateQueries({ queryKey: ['trips'] });
     queryClient.refetchQueries({ queryKey: ['trips', user?.id] });
     success('Refreshed', 'Trip list has been updated');
@@ -168,27 +161,6 @@ const Trips: React.FC = () => {
               onDelete={handleDelete}
             />
           ))}
-        </div>
-      )}
-
-      {/* Debug info in development */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-xs text-gray-600 dark:text-gray-400">
-          <p><strong>Debug Info:</strong></p>
-          <p>User ID: {user?.id}</p>
-          <p>Total trips: {trips?.length || 0}</p>
-          <p>Filtered trips: {filteredTrips.length}</p>
-          <p>Search term: "{searchTerm}"</p>
-          <p>Status filter: {statusFilter}</p>
-          <p>Is deleting: {isDeleting.toString()}</p>
-          {trips && trips.length > 0 && (
-            <div className="mt-2">
-              <p><strong>Trip Details:</strong></p>
-              {trips.map(trip => (
-                <p key={trip.id}>- {trip.title} ({trip.status}) - Owner: {trip.owner_id === user?.id ? 'YOU' : 'OTHER'}</p>
-              ))}
-            </div>
-          )}
         </div>
       )}
     </div>

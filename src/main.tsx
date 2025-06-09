@@ -6,8 +6,6 @@ import './index.css';
 // Función para inicializar el tema ANTES de que React se monte
 const initializeTheme = () => {
   try {
-    console.log('🚀 Initializing theme system...');
-    
     // Obtener tema guardado o usar preferencia del sistema
     const savedTheme = localStorage.getItem('theme');
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -16,10 +14,8 @@ const initializeTheme = () => {
     
     if (savedTheme === 'light' || savedTheme === 'dark') {
       initialTheme = savedTheme;
-      console.log('📱 Using saved theme:', initialTheme);
     } else {
       initialTheme = systemPrefersDark ? 'dark' : 'light';
-      console.log('🖥️ Using system preference:', initialTheme);
     }
     
     // Aplicar tema inmediatamente al DOM
@@ -31,9 +27,6 @@ const initializeTheme = () => {
     if (!savedTheme) {
       localStorage.setItem('theme', initialTheme);
     }
-    
-    console.log('✅ Initial theme applied:', initialTheme);
-    console.log('📋 DOM classes:', root.classList.toString());
     
   } catch (error) {
     console.error('❌ Error initializing theme:', error);

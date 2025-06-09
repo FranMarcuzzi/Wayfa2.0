@@ -12,12 +12,6 @@ const Dashboard: React.FC = () => {
   const { trips, isLoading: tripsLoading, error: tripsError } = useTrips();
   const { data: stats, isLoading: statsLoading, error: statsError } = useTripStats();
 
-  console.log('📊 Dashboard - User:', user?.id);
-  console.log('📊 Dashboard - Trips:', trips?.length || 0, trips);
-  console.log('📊 Dashboard - Stats:', stats);
-  console.log('📊 Dashboard - Loading:', { tripsLoading, statsLoading });
-  console.log('📊 Dashboard - Errors:', { tripsError, statsError });
-
   // Get recent trips (last 4)
   const recentTrips = trips?.slice(0, 4) || [];
 
@@ -149,30 +143,6 @@ const Dashboard: React.FC = () => {
           <RecentActivity activities={recentActivities} />
         </div>
       </div>
-
-      {/* Debug info in development */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-xs text-gray-600 dark:text-gray-400">
-          <p><strong>Debug Info:</strong></p>
-          <p>User ID: {user?.id}</p>
-          <p>Trips loaded: {trips?.length || 0}</p>
-          <p>Stats: {JSON.stringify(stats)}</p>
-          <p>Loading: trips={tripsLoading.toString()}, stats={statsLoading.toString()}</p>
-          {(tripsError || statsError) && (
-            <p className="text-red-600 dark:text-red-400">
-              Errors: {tripsError?.message || ''} {statsError?.message || ''}
-            </p>
-          )}
-          {trips && trips.length > 0 && (
-            <div className="mt-2">
-              <p><strong>Trip IDs:</strong></p>
-              {trips.map(trip => (
-                <p key={trip.id}>- {trip.id}: {trip.title}</p>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 };

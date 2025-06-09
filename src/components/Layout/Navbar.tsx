@@ -21,14 +21,11 @@ import { format } from 'date-fns';
 const Navbar: React.FC = () => {
   const { user, signOut } = useAuth();
   const { userInvitations, acceptInvitation, isAccepting } = useInvitations();
-  const { isDark, toggleTheme, theme } = useTheme();
+  const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-
-  console.log('🔔 Navbar - User invitations:', userInvitations?.length || 0);
-  console.log('🌙 Navbar - Current theme:', theme, 'isDark:', isDark);
 
   const handleSignOut = async () => {
     await signOut();
@@ -37,7 +34,6 @@ const Navbar: React.FC = () => {
 
   const handleAcceptInvitation = async (invitationId: string) => {
     try {
-      console.log('🎯 Accepting invitation from navbar:', invitationId);
       await acceptInvitation(invitationId);
       setIsNotificationsOpen(false);
     } catch (error: any) {
@@ -47,16 +43,7 @@ const Navbar: React.FC = () => {
   };
 
   const handleThemeToggle = () => {
-    console.log('🎨 Navbar: Theme toggle clicked!');
-    console.log('🔍 Current state - theme:', theme, 'isDark:', isDark);
-    
     toggleTheme();
-    
-    // Log después del toggle para verificar
-    setTimeout(() => {
-      console.log('🔄 After toggle - theme should have changed');
-      console.log('📋 DOM classes:', document.documentElement.classList.toString());
-    }, 100);
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -91,7 +78,7 @@ const Navbar: React.FC = () => {
 
           {/* User Actions */}
           <div className="flex items-center space-x-4">
-            {/* Theme Toggle - MEJORADO CON DEBUGGING */}
+            {/* Theme Toggle */}
             <button
               onClick={handleThemeToggle}
               className="p-2 text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-red-400 transition-all duration-200 rounded-lg hover:bg-secondary dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
