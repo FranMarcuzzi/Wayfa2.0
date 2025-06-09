@@ -73,7 +73,7 @@ const Navbar: React.FC = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <MapPin className="h-8 w-8 text-primary" />
-            <span className="text-xl font-semibold text-text-primary dark:text-white transition-colors">TripPlanner</span>
+            <span className="text-xl font-semibold text-text-primary dark:text-white transition-colors">Wayfa</span>
           </Link>
 
           {/* Desktop Navigation */}

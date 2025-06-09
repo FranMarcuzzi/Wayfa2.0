@@ -46,7 +46,7 @@ const ForgotPassword: React.FC = () => {
           <div className="text-center">
             <div className="flex items-center justify-center space-x-2 mb-6">
               <MapPin className="h-10 w-10 text-primary" />
-              <span className="text-2xl font-bold text-text-primary dark:text-white">TripPlanner</span>
+              <span className="text-2xl font-bold text-text-primary dark:text-white">Wayfa</span>
             </div>
           </div>
 
@@ -98,7 +98,7 @@ const ForgotPassword: React.FC = () => {
         <div className="text-center">
           <div className="flex items-center justify-center space-x-2 mb-6">
             <MapPin className="h-10 w-10 text-primary" />
-            <span className="text-2xl font-bold text-text-primary dark:text-white">TripPlanner</span>
+            <span className="text-2xl font-bold text-text-primary dark:text-white">Wayfa</span>
           </div>
           <h2 className="text-3xl font-bold text-text-primary dark:text-white">{t('auth.forgotPasswordTitle')}</h2>
           <p className="mt-2 text-text-secondary dark:text-gray-400">
