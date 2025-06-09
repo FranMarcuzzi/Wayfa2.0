@@ -34,7 +34,7 @@ function App() {
           
           {/* Protected Routes */}
           <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-            <Route index element={<Navigate to="/dashboard" replace />} />
+            <Route index element={<Navigate to="/dashboard\" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="trips" element={<Trips />} />
             <Route path="trips/new" element={<CreateTrip />} />
