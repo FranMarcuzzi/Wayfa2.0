@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 type Theme = 'light' | 'dark';
 
 export const useTheme = () => {
-  // Función para obtener el tema inicial
+  // Función para obtener el tema inicial - DEFAULT: LIGHT
   const getInitialTheme = (): Theme => {
     try {
       // 1. Verificar localStorage primero
@@ -12,10 +12,8 @@ export const useTheme = () => {
         return savedTheme;
       }
       
-      // 2. Si no hay tema guardado, usar preferencia del sistema
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const systemTheme = systemPrefersDark ? 'dark' : 'light';
-      return systemTheme;
+      // 2. DEFAULT: LIGHT THEME (no usar preferencia del sistema)
+      return 'light';
     } catch (error) {
       console.error('❌ Error getting initial theme:', error);
       return 'light'; // Fallback seguro

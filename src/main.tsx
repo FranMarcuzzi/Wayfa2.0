@@ -6,16 +6,16 @@ import './index.css';
 // Función para inicializar el tema ANTES de que React se monte
 const initializeTheme = () => {
   try {
-    // Obtener tema guardado o usar preferencia del sistema
+    // Obtener tema guardado o usar LIGHT como default
     const savedTheme = localStorage.getItem('theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
     let initialTheme: 'light' | 'dark';
     
     if (savedTheme === 'light' || savedTheme === 'dark') {
       initialTheme = savedTheme;
     } else {
-      initialTheme = systemPrefersDark ? 'dark' : 'light';
+      // DEFAULT: LIGHT THEME (no usar preferencia del sistema)
+      initialTheme = 'light';
     }
     
     // Aplicar tema inmediatamente al DOM
@@ -30,8 +30,9 @@ const initializeTheme = () => {
     
   } catch (error) {
     console.error('❌ Error initializing theme:', error);
-    // Fallback seguro
+    // Fallback seguro: LIGHT
     document.documentElement.classList.add('light');
+    localStorage.setItem('theme', 'light');
   }
 };
 
