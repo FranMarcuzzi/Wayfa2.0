@@ -3,29 +3,46 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
-// Initialize theme before app renders to prevent flash
+// Función para inicializar el tema ANTES de que React se monte
 const initializeTheme = () => {
   try {
+    console.log('🚀 Initializing theme system...');
+    
+    // Obtener tema guardado o usar preferencia del sistema
     const savedTheme = localStorage.getItem('theme');
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    const theme = savedTheme || systemTheme;
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    console.log('🚀 Initializing theme:', theme);
+    let initialTheme: 'light' | 'dark';
     
-    // Apply theme immediately to prevent flash
+    if (savedTheme === 'light' || savedTheme === 'dark') {
+      initialTheme = savedTheme;
+      console.log('📱 Using saved theme:', initialTheme);
+    } else {
+      initialTheme = systemPrefersDark ? 'dark' : 'light';
+      console.log('🖥️ Using system preference:', initialTheme);
+    }
+    
+    // Aplicar tema inmediatamente al DOM
     const root = document.documentElement;
     root.classList.remove('light', 'dark');
-    root.classList.add(theme);
+    root.classList.add(initialTheme);
     
-    console.log('✅ Initial theme applied:', theme);
+    // Guardar en localStorage si no estaba guardado
+    if (!savedTheme) {
+      localStorage.setItem('theme', initialTheme);
+    }
+    
+    console.log('✅ Initial theme applied:', initialTheme);
+    console.log('📋 DOM classes:', root.classList.toString());
+    
   } catch (error) {
     console.error('❌ Error initializing theme:', error);
-    // Fallback to light theme
+    // Fallback seguro
     document.documentElement.classList.add('light');
   }
 };
 
-// Initialize theme synchronously
+// Inicializar tema INMEDIATAMENTE
 initializeTheme();
 
 createRoot(document.getElementById('root')!).render(

@@ -21,14 +21,14 @@ import { format } from 'date-fns';
 const Navbar: React.FC = () => {
   const { user, signOut } = useAuth();
   const { userInvitations, acceptInvitation, isAccepting } = useInvitations();
-  const { isDark, toggleTheme } = useTheme();
+  const { isDark, toggleTheme, theme } = useTheme();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
   console.log('🔔 Navbar - User invitations:', userInvitations?.length || 0);
-  console.log('🌙 Navbar - isDark:', isDark);
+  console.log('🌙 Navbar - Current theme:', theme, 'isDark:', isDark);
 
   const handleSignOut = async () => {
     await signOut();
@@ -40,7 +40,6 @@ const Navbar: React.FC = () => {
       console.log('🎯 Accepting invitation from navbar:', invitationId);
       await acceptInvitation(invitationId);
       setIsNotificationsOpen(false);
-      // Optionally navigate to the trip
     } catch (error: any) {
       console.error('❌ Error accepting invitation:', error);
       alert(error.message || 'Failed to accept invitation');
@@ -48,9 +47,16 @@ const Navbar: React.FC = () => {
   };
 
   const handleThemeToggle = () => {
-    console.log('🎨 Theme toggle clicked! Current isDark:', isDark);
+    console.log('🎨 Navbar: Theme toggle clicked!');
+    console.log('🔍 Current state - theme:', theme, 'isDark:', isDark);
+    
     toggleTheme();
-    console.log('🔄 Toggle function called');
+    
+    // Log después del toggle para verificar
+    setTimeout(() => {
+      console.log('🔄 After toggle - theme should have changed');
+      console.log('📋 DOM classes:', document.documentElement.classList.toString());
+    }, 100);
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -85,7 +91,7 @@ const Navbar: React.FC = () => {
 
           {/* User Actions */}
           <div className="flex items-center space-x-4">
-            {/* Theme Toggle - MEJORADO */}
+            {/* Theme Toggle - MEJORADO CON DEBUGGING */}
             <button
               onClick={handleThemeToggle}
               className="p-2 text-text-secondary dark:text-gray-400 hover:text-primary dark:hover:text-red-400 transition-all duration-200 rounded-lg hover:bg-secondary dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
@@ -233,7 +239,10 @@ const Navbar: React.FC = () => {
               
               {/* Mobile Theme Toggle */}
               <button
-                onClick={handleThemeToggle}
+                onClick={() => {
+                  handleThemeToggle();
+                  setIsMenuOpen(false);
+                }}
                 className="flex items-center space-x-2 px-4 py-2 text-text-primary dark:text-gray-300 hover:bg-secondary dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
               >
                 {isDark ? (

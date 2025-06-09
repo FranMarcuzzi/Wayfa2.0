@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, Moon, Sun, Monitor, Palette } from 'lucide-react';
+import { ChevronLeft, Moon, Sun, Monitor, Palette, Zap } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 
 const Settings: React.FC = () => {
   const { theme, setTheme, isDark, toggleTheme } = useTheme();
+
+  console.log('⚙️ Settings - Current theme:', theme, 'isDark:', isDark);
 
   const themeOptions = [
     {
@@ -25,7 +27,19 @@ const Settings: React.FC = () => {
 
   const handleThemeChange = (newTheme: 'light' | 'dark') => {
     console.log('🎨 Settings: Changing theme to', newTheme);
+    console.log('📋 Before change - DOM classes:', document.documentElement.classList.toString());
+    
     setTheme(newTheme);
+    
+    // Verificar después del cambio
+    setTimeout(() => {
+      console.log('📋 After change - DOM classes:', document.documentElement.classList.toString());
+    }, 100);
+  };
+
+  const handleQuickToggle = () => {
+    console.log('⚡ Settings: Quick toggle clicked');
+    toggleTheme();
   };
 
   return (
@@ -61,27 +75,25 @@ const Settings: React.FC = () => {
             </p>
           </div>
 
-          {/* Quick Toggle */}
+          {/* Quick Toggle - MEJORADO */}
           <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                {isDark ? (
-                  <Moon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                ) : (
-                  <Sun className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                )}
+                <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                  <Zap className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                </div>
                 <div>
                   <h3 className="font-medium text-blue-900 dark:text-blue-100">
-                    Current Theme: {isDark ? 'Dark' : 'Light'}
+                    Quick Theme Switch
                   </h3>
                   <p className="text-sm text-blue-700 dark:text-blue-300">
-                    Quick toggle between light and dark modes
+                    Currently using: <strong>{isDark ? 'Dark' : 'Light'} Mode</strong>
                   </p>
                 </div>
               </div>
               <button
-                onClick={toggleTheme}
-                className="bg-primary hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center space-x-2"
+                onClick={handleQuickToggle}
+                className="bg-primary hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               >
                 {isDark ? (
                   <>
@@ -111,7 +123,7 @@ const Settings: React.FC = () => {
                 <button
                   key={option.value}
                   onClick={() => handleThemeChange(option.value)}
-                  className={`w-full flex items-center space-x-4 p-4 rounded-lg border-2 transition-all duration-200 ${
+                  className={`w-full flex items-center space-x-4 p-4 rounded-lg border-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                     isSelected
                       ? 'border-primary bg-red-50 dark:bg-red-900/20 dark:border-red-500'
                       : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 hover:bg-secondary dark:hover:bg-gray-700'
@@ -150,6 +162,19 @@ const Settings: React.FC = () => {
                 </button>
               );
             })}
+          </div>
+
+          {/* Debug Info - TEMPORAL */}
+          <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <h4 className="font-medium text-text-primary dark:text-white mb-2">
+              🔧 Debug Info
+            </h4>
+            <div className="text-sm text-text-secondary dark:text-gray-400 space-y-1">
+              <p>Current theme: <strong>{theme}</strong></p>
+              <p>Is dark: <strong>{isDark.toString()}</strong></p>
+              <p>DOM classes: <strong>{document.documentElement.classList.toString()}</strong></p>
+              <p>LocalStorage: <strong>{localStorage.getItem('theme') || 'not set'}</strong></p>
+            </div>
           </div>
 
           {/* Theme Preview Section */}
@@ -195,9 +220,10 @@ const Settings: React.FC = () => {
               💡 Pro Tips
             </h4>
             <ul className="text-sm text-green-700 dark:text-green-300 space-y-1">
-              <li>• Use the {isDark ? <Sun className="inline h-4 w-4" /> : <Moon className="inline h-4 w-4" />} button in the navigation bar for quick theme switching</li>
+              <li>• Use the theme toggle in the navigation bar for quick switching</li>
               <li>• Your theme preference is automatically saved and will persist across sessions</li>
               <li>• Dark mode can help reduce eye strain in low-light environments</li>
+              <li>• The theme will apply immediately when you make a selection</li>
             </ul>
           </div>
         </div>
