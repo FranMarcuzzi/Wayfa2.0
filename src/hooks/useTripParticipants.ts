@@ -101,7 +101,10 @@ export const useTripParticipants = (tripId?: string) => {
     participants,
     isLoading,
     error,
-    removeParticipant: removeParticipantMutation.mutate,
+    // Expose async variant to await completion in components
+    removeParticipant: removeParticipantMutation.mutateAsync,
+    // If you need the fire-and-forget mutation:
+    removeParticipantOptimistic: removeParticipantMutation.mutate,
     updateParticipantRole: updateParticipantRoleMutation.mutate,
     isRemoving: removeParticipantMutation.isPending,
     isUpdating: updateParticipantRoleMutation.isPending,
