@@ -62,7 +62,7 @@ const SignUpForm: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background dark:bg-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 transition-colors">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 transition-colors>
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-text-primary dark:text-white">{t('auth.createAccount')}</h2>
